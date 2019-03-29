@@ -1,6 +1,23 @@
 var mysql = require("./mysql");
 
 module.exports = {
+  scoreSheet () {
+    return mysql.dbConnect()
+    .then((con) => {
+      var sql_scores  = "SELECT T.year AS Y, T.school, T.grade, Q.text, O.op_text, A.score "+
+                        "FROM   teams AS T, questions AS Q, mc_ops AS O, team_answers AS A, test_qs AS S "+
+                        "WHERE  A.test_q_id = S.test_q_id "+
+                        "AND    S.q_id = Q.q_id "+
+                        "AND    A.team_id = T.team_id "+
+                        "AND    A.mc_answer = O.mc_op_id";
+      return con.query(sql_scores)
+      .then((result) => {
+        con.end();
+        return result;
+      });
+    });
+  },
+
   getMCQs () {
     return mysql.dbConnect()
     .then((con) => {
@@ -39,7 +56,7 @@ module.exports = {
   getTeams () {
     return mysql.dbConnect()
     .then((con) => {
-      var sql_get_team = "SELECT school, grade, year "+
+      var sql_get_team = "SELECT school, grade, year, team_id "+
                          "FROM   teams "+
                          "ORDER BY year DESC, school ASC, grade ASC";
       return con.query(sql_get_team)
@@ -50,11 +67,11 @@ module.exports = {
     });
   },
 
-  createMCQ ({q_year, question, option1, option2, option3, option4, corr_op }) {
+  addMCQ ({q_year, question, option1, option2, option3, option4, corr_op }) {
     return mysql.dbConnect()
     .then(function (con) {
       var sql_q_add = "INSERT INTO questions (text, section_id, year) "+
-                        "SELECT ?, 'A', "+ q_year + " "+
+                        "SELECT ?, 'A', "+ q_year +" "+
                         "FROM questions "+
                         "WHERE NOT EXISTS ("+
                           "SELECT text FROM questions "+
@@ -86,13 +103,10 @@ module.exports = {
     });
   },
 
-  deleteMCQ ({q_year, q_id }) {
+  removeMCQ ({q_id }) {
     return mysql.dbConnect()
     .then(function(con) {
-      var sql_q_test = "SELECT * "+
-                       "FROM   test_qs "+
-                       "WHERE  q_id = "+ q_id +" "+
-                       "AND    year = "+ q_year;
+      var sql_q_test = "SELECT * FROM test_qs WHERE q_id = "+ q_id;
       return con.query(sql_q_test)
 
       .then(result => {
@@ -118,8 +132,6 @@ module.exports = {
   addGrader ({graderName, graderPW }) {
     return mysql.dbConnect()
     .then(function (con) {
-      console.log(graderName);
-      console.log(graderPW);
       var sql_g_add = "INSERT INTO graders (grader_name, grader_pw_hash) "+
                         "SELECT ?, ? "+
                         "FROM graders "+
@@ -140,6 +152,26 @@ module.exports = {
     });
   },
 
+  editGrader ({g_id, graderName }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      console.log('DB');
+      var sql_g_edt = "UPDATE graders "+
+                      "SET grader_name = ? "+
+                      "WHERE grader_id = "+ g_id;
+      return con.query(sql_g_edt, [graderName])
+
+      .then(function (result) {
+        console.log("grader updated");
+        con.end();
+        return;
+      },
+      function (errorMessage) {
+        console.log("grader not updated");
+      });
+    });
+  },
+
   removeGrader ({g_id }) {
     return mysql.dbConnect()
     .then(function(con) {
@@ -152,5 +184,88 @@ module.exports = {
         return;
       });
     }).catch(e => console.error(`${e}`));
+  },
+
+  addTeam ({t_year, school, grade, teamPW }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_t_add = "INSERT INTO teams (school, team_pw_hash, grade, year) "+
+                        "SELECT ?, ?, "+ grade +", "+ t_year +" "+
+                        "FROM teams "+
+                        "WHERE NOT EXISTS ("+
+                          "SELECT school FROM teams "+
+                          "WHERE  school = ? "+
+                          "AND    grade = "+ grade +" "+
+                          "AND    year = "+ t_year +
+                        ") LIMIT 1";
+      return con.query(sql_t_add, [school, teamPW, school])
+
+      .then(function (result) {
+        //console.log("team added");
+        con.end();
+        return;
+      },
+      function (errorMessage) {
+        console.log("team not added");
+      });
+    });
+  },
+
+  removeTeam ({t_id }) {
+    return mysql.dbConnect()
+    .then(function(con) {
+      var sql_t_test = "SELECT * FROM team_answers WHERE team_id = "+ t_id;
+      return con.query(sql_t_test)
+
+      .then(result => {
+        if (result.length != 0) {throw new Error("Team has submitted a test"); }
+        var sql_t_rem = "DELETE FROM teams WHERE team_id = "+ t_id;
+        return con.query(sql_t_rem)
+
+        .then((result) => {
+          //console.log("team removed");
+          con.end();
+          return;
+        });
+      }).catch(e => console.error(`${e}`));
+    });
+  },
+
+  resetPwGrader ({g_id, graderPW }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_g_set = "UPDATE graders "+
+                      "SET grader_pw_hash = ? "+
+                      "WHERE grader_id = "+ g_id;
+      return con.query(sql_g_set, [graderPW])
+
+      .then(function (result) {
+        //console.log("password set");
+        con.end();
+        return;
+      },
+      function (errorMessage) {
+        console.log("password not set");
+      });
+    });
+  },
+
+  resetPwTeam ({t_id, teamPW }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_t_set = "UPDATE teams "+
+                      "SET team_pw_hash = ? "+
+                      "WHERE team_id = "+ t_id;
+      return con.query(sql_t_set, [teamPW])
+
+      .then(function (result) {
+        //console.log("password set");
+        con.end();
+        return;
+      },
+      function (errorMessage) {
+        console.log("password not set");
+      });
+    });
   }
 }

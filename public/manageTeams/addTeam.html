@@ -1,7 +1,7 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <title>iCompute supervisor options</title>
+  <title>iCompute team addition</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,18 +11,28 @@
 
 <body>
   <div class="row mx-3 justify-content-end">
-    <a class="btn btn-muted" href="/" role="button">logout</a>
+    <a class="btn btn-link" href="/manageTeams/" role="button">Back</a>
   </div>
-  <div class="row m-5">
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="manageQs.html" role="button">Manage Question Bank</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageGraders/" role="button">Manage Graders</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageTeams/" role="button">Manage Teams</a>
-	</div>
+  <div class="ml-3" align="center">
+    <form class="addTeam">
+      <h1>Add a new team</h1></br>
+      <textarea class="teamSchool" placeholder="School" rows="1" cols="50" required
+      ></textarea></br>
+      <div class="row justify-content-center">
+        <div class="col-1"><p>Grade</p></div>
+        <div class="col-1">
+          <input type="radio" id="grade4" name="teamGrade_op" value=4 required>
+          <a>4</a>
+        </div>
+        <div class="col-1">
+          <input type="radio" id="grade5" name="teamGrade_op" value=5 required>
+          <a>5</a>
+        </div>
+      </div>
+      <textarea class="teamPW" placeholder="Password" rows="1" cols="50" required
+      ></textarea></br><p></p>
+      <input type="submit" value="Add team">
+    </form>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

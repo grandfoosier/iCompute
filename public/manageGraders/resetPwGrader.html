@@ -1,7 +1,7 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <title>iCompute supervisor options</title>
+  <title>iCompute grader password reset</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,18 +11,18 @@
 
 <body>
   <div class="row mx-3 justify-content-end">
-    <a class="btn btn-muted" href="/" role="button">logout</a>
+    <a class="btn btn-link" href="/manageGraders/" role="button">Back</a>
   </div>
-  <div class="row m-5">
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="manageQs.html" role="button">Manage Question Bank</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageGraders/" role="button">Manage Graders</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageTeams/" role="button">Manage Teams</a>
-	</div>
+  <div class="ml-3" align="center">
+    <form class="resetPwGrader">
+      <h1>Reset grader password</h1></br>
+      <div class="row mx-3 justify-content-center">
+        <select id="grader_dd" class="col-3" required></select></br>
+      </div></br>
+      <textarea class="graderPW col-6" placeholder="Password" rows="1" required
+	      ></textarea></br><p></p>
+      <button type="submit" class="btn btn-info mx-5">Set password</button>
+    </form>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -31,5 +31,19 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <!-- Optional JavaScript -->
   <script src="/app.js"></script>
+  <script>
+  window.onload = function () {
+    get('/getGraders', {})
+    .then (function (response) {
+      return response.json()
+      .then (function (data) {
+        $('#grader_dd').prepend('<option value="" disabled="disabled" selected="selected">Select</option>')
+        for (var key=0, size=data.length; key<size; key += 1) {
+          $("#grader_dd").append(new Option(data[key].name, data[key].ID));
+        }
+      })
+    })
+  }
+  </script>
 </body>
 </html>

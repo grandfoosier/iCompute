@@ -1,7 +1,7 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <title>iCompute supervisor options</title>
+  <title>iCompute grader addition</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,18 +11,17 @@
 
 <body>
   <div class="row mx-3 justify-content-end">
-    <a class="btn btn-muted" href="/" role="button">logout</a>
+    <a class="btn btn-link" href="/manageGraders/" role="button">Back</a>
   </div>
-  <div class="row m-5">
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="manageQs.html" role="button">Manage Question Bank</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageGraders/" role="button">Manage Graders</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageTeams/" role="button">Manage Teams</a>
-	</div>
+  <div class="ml-3" align="center">
+    <form class="addGrader">
+      <h1>Add a new grader</h1></br>
+      <textarea class="graderName col-6" placeholder="Name" rows="1" required
+	      ></textarea></br>
+      <textarea class="graderPW col-6" placeholder="Password" rows="1" required
+	      ></textarea></br><p></p>
+      <button type="submit" class="btn btn-success mx-5">Add Grader</button>
+    </form>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

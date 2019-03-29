@@ -1,35 +1,22 @@
 try{
-  const createMCQ = document.querySelector('.createMCQ');
-  createMCQ.addEventListener('submit', (e) => {
+  const addMCQ = document.querySelector('.addMCQ');
+  addMCQ.addEventListener('submit', (e) => {
     e.preventDefault();
     const today = new Date();
     var q_year = today.getFullYear();
-    const question = createMCQ.querySelector('.question').value;
-    const option1 = createMCQ.querySelector('.option1').value;
-    const option2 = createMCQ.querySelector('.option2').value;
-    const option3 = createMCQ.querySelector('.option3').value;
-    const option4 = createMCQ.querySelector('.option4').value;
+    const question = addMCQ.querySelector('.question').value;
+    const option1 = addMCQ.querySelector('.option1').value;
+    const option2 = addMCQ.querySelector('.option2').value;
+    const option3 = addMCQ.querySelector('.option3').value;
+    const option4 = addMCQ.querySelector('.option4').value;
     const corr_op = getRVBN('corr_op');
     const ops = new Set([option1, option2, option3, option4]);
     if (ops.size == 4) {
-      post('/createMCQ', {q_year, question, option1, option2, option3, option4, corr_op });
-      window.location.href='/manageMCQs.html';
+      post('/addMCQ', {q_year, question, option1, option2, option3, option4, corr_op });
+      window.location.href='/manageMCQs/';
     } else {
       console.log('Options are not distinct');
     }
-  });
-}catch(e){}
-
-try{
-  const deleteMCQ = document.querySelector('.deleteMCQ');
-  deleteMCQ.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const today = new Date();
-    var q_year = today.getFullYear();
-    var dd = document.getElementById('mcq_dd');
-    var q_id = dd.options[dd.selectedIndex].value;
-    post('/deleteMCQ', {q_year, q_id });
-    window.location.href='/manageMCQs.html';
   });
 }catch(e){}
 
@@ -40,18 +27,57 @@ try{
     const graderName = addGrader.querySelector('.graderName').value;
     const graderPW = addGrader.querySelector('.graderPW').value;
     post('/addGrader', {graderName, graderPW });
-    window.location.href='/manageGraders.html';
+    window.location.href='/manageGraders/';
   });
 }catch(e){}
 
 try{
-  const removeGrader = document.querySelector('.removeGrader');
-  removeGrader.addEventListener('submit', (e) => {
+  const editGrader = document.querySelector('.editGrader');
+  editGrader.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const graderName = editGrader.querySelector('.graderName').value;
+    const g_id = editGrader.querySelector('.g_id').value;
+    console.log(graderName, g_id);
+    post('/editGrader', {g_id, graderName});
+    window.location.href='/manageGraders/';
+  });
+}catch(e){}
+
+try{
+  const resetPwGrader = document.querySelector('.resetPwGrader');
+  resetPwGrader.addEventListener('submit', (e) => {
     e.preventDefault();
     var dd = document.getElementById('grader_dd');
     var g_id = dd.options[dd.selectedIndex].value;
-    post('/removeGrader', {g_id });
-    window.location.href='/manageGraders.html';
+    const graderPW = resetPwGrader.querySelector('.graderPW').value;
+    post('/resetPwGrader', {g_id, graderPW });
+    window.location.href='/manageGraders/';
+  });
+}catch(e){}
+
+try{
+  const addTeam = document.querySelector('.addTeam');
+  addTeam.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const today = new Date();
+    var t_year = today.getFullYear();
+    const school = addTeam.querySelector('.teamSchool').value;
+    const grade = getRVBN('teamGrade_op');
+    const teamPW = addTeam.querySelector('.teamPW').value;
+    post('/addTeam', {t_year, school, grade, teamPW });
+    window.location.href='/manageTeams/';
+  });
+}catch(e){}
+
+try{
+  const resetPwTeam = document.querySelector('.resetPwTeam');
+  resetPwTeam.addEventListener('submit', (e) => {
+    e.preventDefault();
+    var dd = document.getElementById('team_dd');
+    var t_id = dd.options[dd.selectedIndex].value;
+    const teamPW = resetPwTeam.querySelector('.teamPW').value;
+    post('/resetPwTeam', {t_id, teamPW });
+    window.location.href='/manageTeams/';
   });
 }catch(e){}
 

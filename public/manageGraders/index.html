@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>iCompute supervisor options</title>
+  <title>iCompute grader management</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,18 +11,22 @@
 
 <body>
   <div class="row mx-3 justify-content-end">
-    <a class="btn btn-muted" href="/" role="button">logout</a>
+    <a class="btn btn-link" href="/" role="button">Back</a>
   </div>
-  <div class="row m-5">
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="manageQs.html" role="button">Manage Question Bank</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageGraders/" role="button">Manage Graders</a>
-	</div>
-	<div class="col-4">
-	  <a class="btn btn-block btn-info btn-lg" href="/manageTeams/" role="button">Manage Teams</a>
-	</div>
+  <div class="row m-5 justify-content-center">
+  	<div class="col-3">
+  	  <a class="btn btn-block btn-success" href="addGrader.html" role="button">Add</a>
+  	</div>
+  	<div class="col-3">
+  	  <a class="btn btn-block btn-warning" href="ERGrader.html" role="button">Edit/Remove</a>
+  	</div>
+  	<div class="col-3">
+  	  <a class="btn btn-block btn-info" href="resetPwGrader.html" role="button">Reset Password</a>
+  	</div>
+  </div>
+
+  <div class="row m-3">
+    <table id="tableOfGraders" class="table table-striped" style="width:100%"></table>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -31,5 +35,29 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <!-- Optional JavaScript -->
   <script src="/app.js"></script>
+  <script>
+    get('/getGraders', {})
+	.then ((response) => {
+	  return response.json()
+	  .then ((data) => {
+	    var r = new Array(), j = -1;
+	    r[++j] =  '<thead>'+
+		            '<tr>'+
+				      '<th>Grader\'s name</th>'+
+				    '</tr>'+
+				  '</thead>'+
+				  '<tbody>'
+	    for (var key=0, size=data.length; key<size; key++){
+		  r[++j] =  '<tr>'+
+		              '<td>'
+		  r[++j] =      data[key].name
+		  r[++j] =    '</td>'+
+		            '</tr>'
+		}
+		r[++j] =  '</tbody>'
+	    $('#tableOfGraders').html(r.join(''))
+	  })
+	})
+  </script>
 </body>
 </html>
