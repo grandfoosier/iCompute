@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<!-- Other CSS -->
+	<link rel="stylesheet" type="text/css" href="iComputeLogin.css">
+
+	<title>iCompute</title>
+</head>
+<body>
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="#">iCompute</a>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" href="index.html">logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Body -->
+	<div class="container pt-5">
+		<div class="row justify-content-end">
+			<div class="col-4 pt-4">
+				<!--<%= JSON.stringify(result) %>-->
+				<h1 class="font-weight-light text-right"></h1>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="row h-100 align-items-center">
+			<div class="col-12">
+				<div class="jumbotron">
+					<p><b>Question <%= parseInt(qNo,10)+1 %></b></p>
+					<p><%= result[0]['text']%></p>
+					<form method="get">
+						<% for (var i = 0; i < result.length; i++) { %>
+						<% if(result[i]['mc_op_id']==result[i]['mc_answer']) { %>
+						<input type="radio" name="options" value="<%=result[i]['mc_op_id']%>" checked> <%= result[i]['op_text'] %><br>
+						<% } else { %>
+						<input type="radio" name="options" value="<%=result[i]['mc_op_id']%>"> <%= result[i]['op_text'] %><br>
+						<% } } %>
+						<input id="qNo" type="hidden" name="qNo" value="<%=qNo%>">
+						<input id="testQId" type="hidden" name="testQId" value="<%=result[0]['test_q_id']%>">
+						<input id="teamAns" type="hidden" name="teamAns">
+						<input id="fromReview" type="hidden" name="fromReview" value="<%= fromReview %>">
+						<br>
+						<div class="btn-group">
+							<% if(qNo>0 && !fromReview) {%>
+							<button type="submit" formaction="/mcqTest" onclick="previous()">Previous</button>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<% } if(qNo<4 && !fromReview) {%>
+							<button type="submit" formaction="/addAns" onclick="next()">Next</button>
+							<% } if(fromReview || qNo==4) { %>
+							 <br><button type="submit" formaction="/reviewAns" onclick="next()">Save: Review Answers</button>
+							 <% } %>
+						</div>
+					</form>
+					<p>&nbsp;</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		
+		function next()
+		{
+			
+			document.getElementById("qNo").value=parseInt(qNo.value,10)+1;
+			getCheckedValue();
+		}
+		function previous()
+		{
+			document.getElementById("qNo").value=parseInt(qNo.value,10)-1;
+		}
+		function getCheckedValue()
+		{
+			var radioButtons=document.getElementsByName("options");
+			
+			for(var i=0;i<radioButtons.length;i++)
+			{
+				if(radioButtons[i].checked) 
+				{
+					document.getElementById("teamAns").value=radioButtons[i].value;
+				}
+			}
+		}
+	</script>
+</body>
+</html>
