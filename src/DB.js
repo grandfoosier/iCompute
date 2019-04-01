@@ -75,49 +75,49 @@ module.exports = {
     });
   },
 
-  editMCQ ({q_id, o_id, q_year, question, option1, option2, option3, option4, corr_op }) {
-    return mysql.dbConnect()
-    .then(function (con) {
-      var sql_q_edt = "UPDATE questions AS Q "+
-                        "SET Q.text = ? "+
-                        "WHERE Q.q_id = ? "+
-                        "AND NOT EXISTS ("+
-                          "SELECT q.text "+
-                          "FROM   (SELECT * FROM questions AS x) AS q "+
-                          "WHERE  q.text = ? "+
-                          "AND    q.year = ?)";
-      return con.query(sql_q_add, [question, q_id, question, q_year])
-      
-      for (int i=0; i<4; i++) {
-        var iscorr = 0;
-        if (i==corr_op) {iscorr = 1; }
-        var sql_o_add = "UPDATE mc_ops "+
-                        "SET op_text = ?, correct = ? "+
-                        "WHERE mc_op_id = ?"
-      }
-
-      .then(function (result) {
-        console.log("question updated");
-
-
-        var values = [[option1, q_id, "a", 0],
-                      [option2, q_id, "b", 0],
-                      [option3, q_id, "c", 0],
-                      [option4, q_id, "d", 0]];
-        values[corr_op][3] = 1;
-        return con.query(sql_o_add, [values])
-
-        .then(function (result) {
-          console.log("options updated");
-          con.end();
-          return;
-        },
-        function (errorMessage) {
-          console.log("question not added");
-        });
-      });
-    });
-  },
+  // editMCQ ({q_id, o_id, q_year, question, option1, option2, option3, option4, corr_op }) {
+  //   return mysql.dbConnect()
+  //   .then(function (con) {
+  //     var sql_q_edt = "UPDATE questions AS Q "+
+  //                       "SET Q.text = ? "+
+  //                       "WHERE Q.q_id = ? "+
+  //                       "AND NOT EXISTS ("+
+  //                         "SELECT q.text "+
+  //                         "FROM   (SELECT * FROM questions AS x) AS q "+
+  //                         "WHERE  q.text = ? "+
+  //                         "AND    q.year = ?)";
+  //     return con.query(sql_q_add, [question, q_id, question, q_year])
+  //
+  //     for (int i=0; i<4; i++) {
+  //       var iscorr = 0;
+  //       if (i==corr_op) {iscorr = 1; }
+  //       var sql_o_add = "UPDATE mc_ops "+
+  //                       "SET op_text = ?, correct = ? "+
+  //                       "WHERE mc_op_id = ?"
+  //     }
+  //
+  //     .then(function (result) {
+  //       console.log("question updated");
+  //
+  //
+  //       var values = [[option1, q_id, "a", 0],
+  //                     [option2, q_id, "b", 0],
+  //                     [option3, q_id, "c", 0],
+  //                     [option4, q_id, "d", 0]];
+  //       values[corr_op][3] = 1;
+  //       return con.query(sql_o_add, [values])
+  //
+  //       .then(function (result) {
+  //         console.log("options updated");
+  //         con.end();
+  //         return;
+  //       },
+  //       function (errorMessage) {
+  //         console.log("question not added");
+  //       });
+  //     });
+  //   });
+  // },
 
   removeMCQ ({q_id }) {
     return mysql.dbConnect()
