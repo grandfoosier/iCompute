@@ -9,6 +9,16 @@ const app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
+router.get('/mcqNew', mcqNew.getMCQTest)
+
+router.get('/addAns', mcqNew.addAns)
+
+router.get('/reviewAns',  mcqNew.reviewAns)
+
+router.get('/mcqGetOne', mcqNew.mcqGetOne)
+
+router.get('/mcqSubmit', mcqNew.mcqSubmit)
+
 app.get('/getMCQs', (req, res) => {
   DB.getMCQs()
   .then(function (result) {
