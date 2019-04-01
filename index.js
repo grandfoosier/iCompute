@@ -1,13 +1,34 @@
 const express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const DB = require('./src/DB');
+var mcqTest=require('./src/mcqTest')
 
 const app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/mcqTest', mcqTest.getMCQTest)
+app.get('/addAns', mcqTest.addAns)
+app.get('/reviewAns',  mcqTest.reviewAns)
+app.get('/mcqGetOne', mcqTest.mcqGetOne)
+app.get('/mcqSubmit', mcqTest.mcqSubmit)
 
 app.get('/getMCQs', (req, res) => {
   DB.getMCQs()
