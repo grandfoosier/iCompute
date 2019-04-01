@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>iCompute MCQ edit</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="row mx-3 justify-content-end">
+    <a class="btn btn-link" href="/manageMCQs/" role="button">Back</a>
+  </div>
+
+  <div class="ml-3" align="center">
+    <form class="editTeam">
+      <h1>Edit a multiple choice question</h1></br>
+      <input type="hidden" class="q_id" id="q_id" value="-1"></input>
+      <input type="hidden" class="o_id" id="o_id" value="-1"></input>
+      <input type="hidden" class="q_year" id="q_year" value="-1"></input>
+
+      <textarea class="question col-9" id="question" placeholder="Question" rows="4" cols="50" required></textarea><p></p>
+
+      <p>Enter the answer choices and indicate which is correct</p>
+      <input type="radio" id="corrop1" name="corr_op" value=0 required>
+      <textarea class="option1 col-6" id="option1" placeholder="Option A" rows="1" required></textarea></br>
+      <input type="radio" id="corrop2" name="corr_op" value=1>
+      <textarea class="option2 col-6" id="option2" placeholder="Option B" rows="1" required></textarea></br>
+      <input type="radio" id="corrop3" name="corr_op" value=2>
+      <textarea class="option3 col-6" id="option3" placeholder="Option C" rows="1" required></textarea></br>
+      <input type="radio" id="corrop4" name="corr_op" value=3>
+      <textarea class="option4 col-6" id="option4" placeholder="Option D" rows="1" required></textarea></br><p></p>
+
+      <button type="submit" class="btn btn-success mx-5">Update question</button>
+    </form>
+  </div>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Optional JavaScript -->
+  <script src="/app.js"></script>
+  <script>
+  window.onload = function () {
+    var q_id = location.search.substring(1).split("=")[1];
+    get('/getMCQs', {})
+    .then (function (response) {
+      return response.json()
+      .then (function (data) {
+        for (var key=0, size=data.length; key<size; key += 1) {
+          if (data[key].ID == q_id) {break; }
+        }
+        $("#q_id").val(data[key].ID);
+        $("#o_id").val(data[key].OID);
+        $("#q_year").val(data[key].Y);
+        $("#question").html(data[key].Q);
+
+        $("#option1").html(data[key].Os);
+        if (data[key].C) {
+          $('input[name=corr_op][value=0]').prop('checked',true)
+        }
+        key++;
+        $("#option2").html(data[key].Os);
+        if (data[key].C) {
+          $('input[name=corr_op][value=1]').prop('checked',true)
+        }
+        key++;
+        $("#option3").html(data[key].Os);
+        if (data[key].C) {
+          $('input[name=corr_op][value=2]').prop('checked',true)
+        }
+        key++;
+        $("#option4").html(data[key].Os);
+        if (data[key].C) {
+          $('input[name=corr_op][value=3]').prop('checked',true)
+        }
+      })
+    })
+  }
+  </script>
+</body>
+</html>

@@ -81,6 +81,9 @@
       post('/removeTeam', {t_id });
       window.location.href='/manageTeams/';
     }
+    else {
+      window.location.href='/manageTeams/editTeam.html?t_id='+t_id;
+    }
   }
 </script>
 </body>

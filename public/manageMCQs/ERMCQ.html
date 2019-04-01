@@ -81,6 +81,9 @@
       post('/removeMCQ', {q_id });
       window.location.href='/manageMCQs/';
     }
+    else {
+      window.location.href='/manageMCQs/editMCQ.html?q_id='+q_id;
+    }
   }
   </script>
 </body>

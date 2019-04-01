@@ -16,15 +16,22 @@ app.get('/getMCQs', (req, res) => {
   });
 });
 
-app.get('/scoreSheet', (req, res) => {
-  DB.scoreSheet()
-  .then(function (result) {
-    res.status(200).send(result);
+app.post('/addMCQ', (req, res) => {
+  DB.addMCQ({
+    q_year: req.body.q_year,
+    question: req.body.question,
+    option1: req.body.option1,
+    option2: req.body.option2,
+    option3: req.body.option3,
+    option4: req.body.option4,
+    corr_op: req.body.corr_op
   });
 });
 
-app.post('/addMCQ', (req, res) => {
-  DB.addMCQ({
+app.post('/editMCQ', (req, res) => {
+  DB.editMCQ({
+    q_id: req.body.q_id,
+    o_id: req.body.o_id,
     q_year: req.body.q_year,
     question: req.body.question,
     option1: req.body.option1,
@@ -97,6 +104,15 @@ app.post('/addTeam', (req, res) => {
       grade: req.body.grade,
       teamPW: hash
     });
+  });
+});
+
+app.post('/editTeam', (req, res) => {
+  DB.editTeam({
+    t_id: req.body.t_id,
+    teamYear: req.body.teamYear,
+    teamSchool: req.body.teamSchool,
+    teamGrade: req.body.teamGrade
   });
 });
 

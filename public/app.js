@@ -21,6 +21,29 @@ try{
 }catch(e){}
 
 try{
+  const editMCQ = document.querySelector('.editMCQ');
+  editMCQ.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q_id = editMCQ.querySelector('.q_id').value;
+    const o_id = editMCQ.querySelector('.o_id').value;
+    const q_year = editMCQ.querySelector('.q_year').value;
+    const question = editMCQ.querySelector('.question').value;
+    const option1 = editMCQ.querySelector('.option1').value;
+    const option2 = editMCQ.querySelector('.option2').value;
+    const option3 = editMCQ.querySelector('.option3').value;
+    const option4 = editMCQ.querySelector('.option4').value;
+    const corr_op = getRVBN('corr_op');
+    const ops = new Set([option1, option2, option3, option4]);
+    if (ops.size == 4) {
+      post('/editMCQ', {q_id, o_id, q_year, question, option1, option2, option3, option4, corr_op });
+      window.location.href='/manageMCQs/';
+    } else {
+      console.log('Options are not distinct');
+    }
+  });
+}catch(e){}
+
+try{
   const addGrader = document.querySelector('.addGrader');
   addGrader.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -37,7 +60,6 @@ try{
     e.preventDefault();
     const graderName = editGrader.querySelector('.graderName').value;
     const g_id = editGrader.querySelector('.g_id').value;
-    console.log(graderName, g_id);
     post('/editGrader', {g_id, graderName});
     window.location.href='/manageGraders/';
   });
@@ -60,11 +82,24 @@ try{
   addTeam.addEventListener('submit', (e) => {
     e.preventDefault();
     const today = new Date();
-    var t_year = today.getFullYear();
+    const t_year = today.getFullYear();
     const school = addTeam.querySelector('.teamSchool').value;
     const grade = getRVBN('teamGrade_op');
     const teamPW = addTeam.querySelector('.teamPW').value;
     post('/addTeam', {t_year, school, grade, teamPW });
+    window.location.href='/manageTeams/';
+  });
+}catch(e){}
+
+try{
+  const editTeam = document.querySelector('.editTeam');
+  editTeam.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const t_id = editTeam.querySelector('.t_id').value;
+    const teamYear = editTeam.querySelector('.teamYear').value;
+    const teamSchool = editTeam.querySelector('.teamSchool').value;
+    const teamGrade = getRVBN('teamGrade_op');
+    post('/editTeam', {t_id, teamYear, teamSchool, teamGrade });
     window.location.href='/manageTeams/';
   });
 }catch(e){}

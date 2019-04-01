@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>iCompute grader edit</title>
+  <title>iCompute team edit</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,15 +11,31 @@
 
 <body>
   <div class="row mx-3 justify-content-end">
-    <a class="btn btn-link" href="/manageGraders/" role="button">Back</a>
+    <a class="btn btn-link" href="/manageTeams/" role="button">Back</a>
   </div>
+
   <div class="ml-3" align="center">
-    <form class="editGrader">
-      <h1>Edit a grader</h1></br>
-      <input type="hidden" class="g_id" id="g_id" value="-1"></input>
-      <textarea class="graderName col-6" id="graderName" placeholder="Name" rows="1" required
-      ></textarea></br><p></p>
-      <button type="submit" class="btn btn-secondary mx-5">Update Grader</button>
+    <form class="editTeam">
+      <h1>Edit a team</h1></br>
+      <input type="hidden" class="t_id" id="t_id" value="-1"></input>
+      <input type="hidden" class="teamYear" id="teamYear" value="-1"></input>
+
+      <textarea class="teamSchool col-6" id="teamSchool" placeholder="School" rows="1" required
+      ></textarea></br>
+
+      <div class="row justify-content-center">
+        <div class="col-1"><p>Grade</p></div>
+        <div class="col-1">
+          <input type="radio" id="grade4" name="teamGrade_op" value=4 required>
+          <a>4</a>
+        </div>
+        <div class="col-1">
+          <input type="radio" id="grade5" name="teamGrade_op" value=5 required>
+          <a>5</a>
+        </div>
+      </div><p></p>
+
+      <button type="submit" class="btn btn-secondary mx-5">Update Team</button>
     </form>
   </div>
 
@@ -31,15 +47,22 @@
   <script src="/app.js"></script>
   <script>
   window.onload = function () {
-    var g_id = location.search.substring(1).split("=")[1];
-    get('/getGraders', {})
+    var t_id = location.search.substring(1).split("=")[1];
+    get('/getTeams', {})
     .then (function (response) {
       return response.json()
       .then (function (data) {
         for (var key=0, size=data.length; key<size; key += 1) {
-          if (data[key].ID == g_id) {
-            $("#graderName").html(data[key].name);
-            $("#g_id").val(data[key].ID);
+          if (data[key].team_id == t_id) {
+            $("#t_id").val(data[key].team_id);
+            $("#teamYear").val(data[key].year);
+            $("#teamSchool").html(data[key].school);
+            if (data[key].grade == 4) {
+              $('input[name=teamGrade_op][value=4]').prop('checked',true)
+            }
+            else {
+              $('input[name=teamGrade_op][value=5]').prop('checked',true)
+            }
           }
         }
       })
