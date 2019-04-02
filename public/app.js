@@ -44,6 +44,42 @@ try{
 }catch(e){}
 
 try{
+  const ChooseGrade = document.querySelector('.SelectDBPage')
+  ChooseGrade.addEventListener('submit', (e) => {
+    e.preventDefault();
+    var dd = document.getElementById('grade');
+    var grade = dd.options[dd.selectedIndex].value;
+    get('/testmcq.html', {grade});
+  });
+}catch(e){}
+
+try{
+  const AddToTest = document.querySelector('.AllMCQ')
+  AddToTest.addEventListener('submit', (e) => {
+    e.preventDefault();
+    var ref = window.location.href;
+    var grade = (ref.substring(ref.length - 1, ref.length));
+    var dd = document.getElementById('mcq_dd');
+    var q_id = dd.options[dd.selectedIndex].value;
+    post('/addToTest', {q_id, grade});
+    window.location.href='/testmcq.html?grade='+ grade;
+  });
+}catch(e){}
+
+try{
+  const DelFromTest = document.querySelector('.TestMCQ')
+  DelFromTest.addEventListener('submit', (e) => {
+    e.preventDefault();
+    var ref = window.location.href;
+    var grade = (ref.substring(ref.length - 1, ref.length));
+    var dd = document.getElementById('test_dd');
+    var q_id = dd.options[dd.selectedIndex].value;
+    post('/delFromTest', {q_id, grade});
+    window.location.href='/testmcq.html?grade='+ grade
+  });
+}catch(e){}
+
+try{
   const addGrader = document.querySelector('.addGrader');
   addGrader.addEventListener('submit', (e) => {
     e.preventDefault();

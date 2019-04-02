@@ -69,6 +69,32 @@ app.post('/removeMCQ', (req, res) => {
   });
 });
 
+app.post('/getTestQs', (req, res) => {
+  DB.getTestQs({
+    grade: req.body.grade})
+  .then(function (result) {
+    res.status(200).send(result);
+  });
+});
+
+app.post('/addToTest', (req, res) => {
+  DB.addToTest({
+    q_id: req.body.q_id,
+    grade: req.body.grade})
+  .then((response) => {
+    return response;
+  });
+});
+
+app.post('/delFromTest', (req, res) => {
+  DB.delFromTest({
+    q_id: req.body.q_id,
+    grade: req.body.grade})
+  .then((response) => {
+    return response;
+  });
+});
+
 app.get('/getGraders', (req, res) => {
   DB.getGraders()
   .then(function (result) {
