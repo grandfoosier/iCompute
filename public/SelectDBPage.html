@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 	<!-- Required meta tags -->
@@ -14,34 +14,49 @@
 <br>
 </head>
 <body>
-<div class="row mx-3 justify-content-end">
-  <a class="btn btn-link" href="/" role="button">Back</a>
+
+<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="#">iCompute</a>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav ml-auto">
+					<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" href="loginPage.html">logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+<!-- Body -->
+	<div class="container pt-5">
+		<div class="row justify-content-end">
+			<div class="col-4 pt-4">
+				<h1 class="font-weight-light text-right">45:13</h1>
+			</div>
+		</div>
+	</div>
+<div class="container">
+		<div class="row h-100 align-items-center">
+			<div class="col-9">
+				<h1 class> Question bank </h1>
 </div>
-<div>
-<h2 style="text-align:center;"> Team scores, download CSV File</h2>
-<br><br>
-  <form method="get">
-      <div style="text-align:center"> 
-        <select class="btn btn-secondary btn-lg dropdown-toggle" name="year">
-          <% for(var i=0; i<result.length; i++) { %>
-          <option name="year" value="<%= result[i].year %>"><%= result[i].year %></option>
-          <% } %>
-        </select>
-        &nbsp;&nbsp;&nbsp;
-        <select class="btn btn-secondary btn-lg dropdown-toggle" name="grade">
-          <option name="grade" value="4">4th grade</option>
-          <option name="grade" value="5">5th grade</option>
-        </select>
-        &nbsp;&nbsp;&nbsp;
-        <button class="btn btn-info btn-lg" type="submit" formaction="/getCSV"> Download CSV file for scores </button>
-      </div>
-  </form>
 </div>
+<br>
+<br>
+<br>
+<form class="chooseGrade" action="/testmcq.html" method="get">
+  <select name="grade" id="grade" required>
+    <option value="" disabled selected>Choose a question bank</option>
+    <option value=4>Question bank for Grade 4</option>
+    <option value=5>Question bank for Grade 5</option>
+  </select>
+  <br>
+  <br>
+  <button>Submit</button>
+</form>
 
-
-</body>
-</html>
-
+</div>
+</div>
 </body>
   
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -49,13 +64,4 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <!-- Optional JavaScript -->
-  <script type="text/javascript">
-    
-    function getSelected()
-    {
-      alert("Here")
-      alert(document.getElementById("year").value)
-    }
-
-  </script>
  </html>

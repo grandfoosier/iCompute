@@ -9,6 +9,7 @@ const saltRounds = 10;
 const DB = require('./src/DB');
 var mcqTest=require('./src/mcqTest')
 var getTeamScores=require('./src/getTeamScores')
+const testQs = require('./src/testQs')
 
 const app = express();
 app.use(express.static('public'));
@@ -156,6 +157,44 @@ app.post('/resetPwTeam', (req, res) => {
     });
   });
 });
+
+
+/* Test Questions */
+app.get('/getMCQs', (req, res) => {
+  testQs
+    .getMCQs()
+    .then(function (result) {
+      res.status(200).send(result)
+  })
+})
+
+app.post('/getTestQs', (req, res) => {
+  testQs
+    .getTestQs({grade: req.body.grade})
+    .then(function (result) {
+      res.status(200).send(result)
+  })
+})
+
+app.post('/addToTest', (req, res) => {
+  testQs
+    .addToTest({
+      q_id: req.body.q_id,
+    grade: req.body.grade
+    }).then((response) => {
+      return response
+    })
+})
+
+app.post('/delFromTest', (req, res) => {
+  testQs
+    .delFromTest({
+      q_id: req.body.q_id,
+    grade: req.body.grade
+    }).then((response) => {
+      return response
+    })
+})
 
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
