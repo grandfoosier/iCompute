@@ -8,6 +8,7 @@ const saltRounds = 10;
 
 const DB = require('./src/DB');
 var mcqTest=require('./src/mcqTest')
+var getTeamScores=require('./src/getTeamScores')
 
 const app = express();
 app.use(express.static('public'));
@@ -29,6 +30,9 @@ app.get('/addAns', mcqTest.addAns)
 app.get('/reviewAns',  mcqTest.reviewAns)
 app.get('/mcqGetOne', mcqTest.mcqGetOne)
 app.get('/mcqSubmit', mcqTest.mcqSubmit)
+app.get('/csvPage',getTeamScores.getYears)
+
+app.get('/getCSV', getTeamScores.getCSV)
 
 app.get('/getMCQs', (req, res) => {
   DB.getMCQs()
