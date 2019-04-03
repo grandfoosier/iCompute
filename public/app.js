@@ -53,6 +53,7 @@ try{
   });
 }catch(e){}
 
+/*
 try{
   const AddToTest = document.querySelector('.AllMCQ')
   AddToTest.addEventListener('submit', (e) => {
@@ -76,6 +77,40 @@ try{
     var q_id = dd.options[dd.selectedIndex].value;
     post('/delFromTest', {q_id, grade});
     window.location.href='/testmcq.html?grade='+ grade
+  });
+}catch(e){}
+*/
+
+try{
+  const AddToTestL = document.querySelector('.AllMCQs')
+  AddToTestL.addEventListener('submit', (e) => {
+    e.preventDefault();
+    var ref = window.location.href;
+    var grade = (ref.substring(ref.length - 1, ref.length));
+    $('#tableOfMCQs tbody tr input:checkbox').each(function() {
+      if (this.checked) {
+        q_id = this.value;
+        post('/addToTest', {q_id, grade});
+      }
+      window.location.href='/testmcqlists.html?grade='+ grade;
+    });
+  });
+}catch(e){}
+
+try{
+  const DelFromTestL = document.querySelector('.TestMCQs')
+  DelFromTestL.addEventListener('submit', (e) => {
+    e.preventDefault();
+    var ref = window.location.href;
+    var grade = (ref.substring(ref.length - 1, ref.length));
+    $('#tableOfTestMCQs tbody tr input:checkbox').each(function() {
+      if (this.checked) {
+        q_id = this.value;
+        console.log(q_id);
+        post('/delFromTest', {q_id, grade});
+      }
+      window.location.href='/testmcqlists.html?grade='+ grade;
+    });
   });
 }catch(e){}
 

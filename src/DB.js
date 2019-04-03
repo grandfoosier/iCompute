@@ -1,6 +1,7 @@
 var mysql = require("./mysql");
 
 module.exports = {
+  /*
   scoreSheet () {
     return mysql.dbConnect()
     .then((con) => {
@@ -17,6 +18,7 @@ module.exports = {
       });
     });
   },
+  */
 
   getMCQs () {
     return mysql.dbConnect()
