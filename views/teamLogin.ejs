@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+   <style>
+   
+        h1 {
+            text-align:left;
+            padding-left:2em; 
+            color:orange;
+            background-color:black; 
+            font-size: 2cm;
+            margin-top: 0%;            
+        }
+        h2{
+            text-decoration-style: solid;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 1cm;
+        }
+        body{ 
+     background: url(website-design-background-1.jpg) repeat-x fixed; 
+     background-size: cover;
+   }
+        select{
+            text-align:center;
+            font-size:100%;
+            width: 25%;
+
+        }
+        .dropbtn {
+  background-color:grey;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin-top:1.5em;
+  margin-right: 3em;
+  
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color:orange;
+}
+form{
+    background-color:darkgray;
+    margin-top: 4em;
+    margin-bottom: 4em;
+    margin-left: 25em;
+    margin-right: 25em;
+    padding-top:130px;
+    padding-bottom:130px;
+}
+        
+          </style>
+          <script>
+          //   window.onload=function(){                                                                      
+          //   var i=0; var previous_hash = window.location.hash;                                           
+          //   var x = setInterval(function(){                                                              
+          //     i++; window.location.hash = "/noop/" + i;                                                  
+          //     if (i==10){clearInterval(x);                                                               
+          //       window.location.hash = previous_hash;}                                                   
+          //   },10);
+          // }
+          </script>
+           <head>
+          <title>icompute1.0</title>
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        
+    </head>
+    <body>
+       <div class="dropdown" style="float:right;">
+                <button class="dropbtn">MENU</button>
+                <div class="dropdown-content">
+                <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\supervisor.html">SUPERVISOR</a>
+                <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\validategrader.html">GRADER</a>
+                </div>
+        </div>
+        <h1><b><I>icompute</I></b></h1>
+         <form align="center" method="post" action="/checkTeamPass">
+          <% if(message===undefined || message!='Login information incorrect') { var message='' } %>
+            <h2>Student's Login</h2><br/>
+            <% if(message!='') { %>
+            <label><font color="red"><%= message %></font></label><br>
+            <% } %>
+            Grade <br/><select id="grade" name="grade" onchange="getSchool(this.value)">
+            <option value=""></option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+            </select><br/><br/>
+            School Name<br/><select name="school" id="school">
+            <option value="" disabled selected> </option>
+            </select><br/><br>
+            Password<br/><input type="password" name="pwd"><br><br>
+        <button class="btn btn-primary" >Login</button>
+        <br>
+        <!-- <a   href="forgotpassword.html" >forgot password or username?</a> -->
+        </form>
+
+    </body>
+
+  <script type="text/javascript">
+
+    function getSchool(value) {
+      var schools
+      var schOptions = "<option></option>";
+      //alert(value.length)
+      if (value.length == 0) 
+        document.getElementById("school").innerHTML = "<option></option>";
+      else{
+        //alert("<%= result4th[0].school %>");
+        
+        var grade = document.getElementById("grade");
+        
+        if(value==4)
+        {
+          <% for(var i=0; i<result4th.length; i++) { %>
+              schOptions += "<option name='school'>"+"<%= result4th[i].school %>"+"</option>";
+          <% } %>
+        }
+        else
+        {
+          <% for(var i=0; i<result5th.length; i++) { %>
+              schOptions += "<option name='school'>"+"<%= result5th[i].school %>"+"</option>";
+          <% } %>
+        }
+        
+        document.getElementById("school").innerHTML = schOptions;
+      }
+    }
+    
+  </script>
+
+</html>
+

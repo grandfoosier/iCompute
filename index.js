@@ -5,16 +5,24 @@ var logger = require('morgan');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+var cookieSession = require('cookie-session')
 
 const DB = require('./src/DB');
 var mcqTest=require('./src/mcqTest')
 var getTeamScores=require('./src/getTeamScores')
 const testQs = require('./src/testQs')
+const teamLogin=require('./src/teamLogin')
 
 const app = express();
+
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,9 +39,15 @@ app.get('/addAns', mcqTest.addAns)
 app.get('/reviewAns',  mcqTest.reviewAns)
 app.get('/mcqGetOne', mcqTest.mcqGetOne)
 app.get('/mcqSubmit', mcqTest.mcqSubmit)
+
 app.get('/csvPage',getTeamScores.getYears)
 
 app.get('/getCSV', getTeamScores.getCSV)
+
+app.get('/teamLogin',teamLogin.getSchools)
+
+app.post('/checkTeamPass',teamLogin.checkTeamPass)
+
 
 app.get('/getMCQs', (req, res) => {
   DB.getMCQs()

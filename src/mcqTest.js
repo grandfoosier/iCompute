@@ -3,6 +3,7 @@ var mysql = require('./mysql')
 
 mcqGetOne=exports.mcqGetOne=(req,res)=>{
   var con
+  const teamId=req.session.teamId
   const fromReview=true
   return mysql.dbConnect()
   .then((c) => {
@@ -14,7 +15,7 @@ mcqGetOne=exports.mcqGetOne=(req,res)=>{
                         FROM questions AS q, mc_ops AS o, test_qs AS t LEFT JOIN team_answers AS a \
                         ON a.test_q_id=t.test_q_id \
                         WHERE t.q_id=q.q_id AND q.q_id=o.q_id \
-                        AND a.team_id=1 AND t.q_id='+qId+
+                        AND a.team_id='+teamId+' AND t.q_id='+qId+
                         ' ORDER BY mc_op_id'
     con.query(sql_q_with_ops)
     .then((result)=>{
@@ -28,7 +29,11 @@ getMCQTest=exports.getMCQTest=(req,res)=>{
   var con
   let fromReview=false
   //grade hard coded to be changed later
-  let grade=4
+  let grade=req.session.grade
+  let year=req.session.year
+
+console.log('grade::: '+req.session.grade)
+console.log('year::: '+req.session.year)
 
   return mysql.dbConnect()
   .then((c) => {
@@ -37,7 +42,7 @@ getMCQTest=exports.getMCQTest=(req,res)=>{
     if(qNo===undefined)
       qNo=0
     var sql_test_qs = 'SELECT q_id FROM test_qs \
-                        WHERE grade=4 AND year=2019 \
+                        WHERE grade='+grade+' AND year='+year+' \
                         ORDER BY test_q_id LIMIT '+qNo+',1'
     con.query(sql_test_qs)
     .then((result)=>{
@@ -68,7 +73,7 @@ addAns=exports.addAns=(req,res)=>{
     var qNo = req.query["qNo"];
     var testQId=req.query["testQId"];
     var teamAns=req.query["teamAns"];
-    var teamId=1
+    var teamId=req.session.teamId
     if(!qNo)
       qNo=0
 
@@ -118,7 +123,7 @@ reviewAns=exports.reviewAns=(req,res)=>{
     return mysql.dbConnect()
     .then((c) => {
       con=c
-      var teamId=1
+      var teamId=req.session.teamId
 
       var sql_test_q_ans='SELECT t.q_id AS q_id, q.text AS q_text, a.mc_answer AS mc_answer \
                               FROM questions AS q, test_qs AS t LEFT JOIN team_answers AS a \
@@ -154,7 +159,7 @@ transferMcqAll=exports.transferMcqAll=(req, res, mcqAll, con)=>{
 
 mcqSubmit=exports.mcqSubmit=(req, res)=>{
   var con
-  const teamId=1
+  const teamId=req.session.teamId
   return mysql.dbConnect()
   .then((c) => {
     con=c
@@ -173,7 +178,6 @@ mcqSubmit=exports.mcqSubmit=(req, res)=>{
         }
       }
     })
-    //ugfuf
     .then(()=>{
       const sql_upd_mcq_secScore='UPDATE teams SET mcq_score=(SELECT SUM(score) FROM team_answers WHERE team_id='+teamId+') \
                                    WHERE team_id='+teamId
@@ -181,7 +185,7 @@ mcqSubmit=exports.mcqSubmit=(req, res)=>{
       .then((resultUpd)=>{
         let title='MCQ score updated'
         con.end()
-        res.render('index',{title})
+        res.render('teamHome',{})
       })
     })
   })
