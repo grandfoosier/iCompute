@@ -6,7 +6,7 @@ getYears=exports.getYears=(req,res)=>{
   return mysql.dbConnect()
   .then((c) => {
     con=c
-    
+
     var sql_getYears='SELECT year FROM teams GROUP BY year ORDER BY year DESC'
     con.query(sql_getYears)
     .then((result)=>{
@@ -17,7 +17,7 @@ getYears=exports.getYears=(req,res)=>{
 }
 
 getCSV=exports.getCSV=(req,res)=>{
-  
+
   var con
   let row=''
   return mysql.dbConnect()
@@ -25,11 +25,11 @@ getCSV=exports.getCSV=(req,res)=>{
     con=c
     let year=req.query['year']
     let grade=req.query['grade']
-    
+
     var sql_getYears='SELECT school, grade, mcq_score, sa_score, scratch_score, \
                       (mcq_score+sa_score+scratch_score) AS total, ranking \
                       FROM teams WHERE year='+year+' AND grade='+grade+' ORDER BY total DESC'
-    
+
     con.query(sql_getYears)
     .then((result)=>{
       con.end()
@@ -56,6 +56,7 @@ getCSV=exports.getCSV=(req,res)=>{
       }
 
       const doWorkPromise=new Promise((resolve, reject) => {
+        console.log(row)
           return fs.appendFile('results.csv', row, err => {
             if(err)
               reject(err)
@@ -70,7 +71,7 @@ getCSV=exports.getCSV=(req,res)=>{
       }).catch((error)=>{
           console.log('Error',error)
       })
-      
+
      })
   })
 }

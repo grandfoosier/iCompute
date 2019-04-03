@@ -33,23 +33,27 @@
 <body>
   <div class="ml-3">
     <div class="row">
-      <div class="col-6">
-        <form class="AllMCQ">
+      <div class="col-6" align="center">
+        <form class="AllMCQs">
           <p>All questions</p>
+          <input type="submit" class="my-3" value="Add questions">
           <div class="row mx-3">
-            <select id="mcq_dd" class="col-9"></select></br>
+            <div class="row m-3">
+              <table id="tableOfMCQs" class="table" style="width:100%"></table>
+            </div>
           </div>
-          <input type="submit" class="my-3" value="Add question">
         </form>
       </div>
 
-      <div class="col-6">
-        <form class="TestMCQ">
+      <div class="col-6" align="center">
+        <form class="TestMCQs">
           <p>Test questions</p>
+          <input type="submit" class="my-3" value="Remove questions">
           <div class="row mx-3">
-            <select id="test_dd" class="col-9"></select></br>
+            <div class="row m-3">
+              <table id="tableOfTestMCQs" class="table" style="width:100%"></table>
+            </div>
           </div>
-          <input type="submit" class="my-3" value="Remove question">
         </form>
       </div>
     </div>
@@ -71,20 +75,41 @@ window.onload = function () {
   .then (function (response) {
     return response.json()
     .then (function (data) {
-      for (var key=0, size=data.length; key<size; key += 4) {
-        $("#mcq_dd").append(new Option(data[key].Q, data[key].ID));
+      var r = new Array(), j = -1;
+      r[++j] = '<tbody>'
+      for (var key=0, size=data.length; key<size; key+=4) {
+        r[++j] = '<tr>'+
+                   '<td>'
+        r[++j] =     '<input type="checkbox" id="chk" name="qs[]" value="'+ data[key].ID +'" />&nbsp;'
+        r[++j] =   '</td>'+
+                   '<td>'
+        r[++j] =     data[key].Q
+        r[++j] =   '</td>'+
+                 '</tr>'
       }
+      r[++j] = '</tbody>'
+      $('#tableOfMCQs').html(r.join(''))
     })
   })
 
   post('/getTestQs', {'grade': grade})
   .then (function (response) {
     return response.json()
-    .then (function (result) {
-      console.log(result);
-      result.forEach((question) => {
-        $("#test_dd").append(new Option(question.text, question.q_id));
-      })
+    .then (function (data) {
+      var r = new Array(), j = -1;
+      r[++j] = '<tbody>'
+      for (var key=0, size=data.length; key<size; key++) {
+        r[++j] = '<tr>'+
+                   '<td>'
+        r[++j] =     '<input type="checkbox" id="chk" name="qs[]" value="'+ data[key].q_id +'" />&nbsp;'
+        r[++j] =   '</td>'+
+                   '<td>'
+        r[++j] =     data[key].text
+        r[++j] =   '</td>'+
+                 '</tr>'
+      }
+      r[++j] = '</tbody>'
+      $('#tableOfTestMCQs').html(r.join(''))
     })
   })
 }
