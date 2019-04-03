@@ -1,5 +1,0 @@
-download and install node: https://nodejs.org/en/download/current/
-
-from terminal in your work directory: 
-	npm install express
-	npm install promise-mysql

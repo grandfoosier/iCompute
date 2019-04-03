@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
    <style>
-   
+
         h1 {
             text-align:left;
-            padding-left:2em; 
+            padding-left:2em;
             color:orange;
-            background-color:black; 
+            background-color:black;
             font-size: 2cm;
-            margin-top: 0%;            
+            margin-top: 0%;
         }
         h2{
             text-decoration-style: solid;
             font-family: Georgia, 'Times New Roman', Times, serif;
             font-size: 1cm;
         }
-        body{ 
-     background: url(website-design-background-1.jpg) repeat-x fixed; 
+        body{
+     background: url(/images/website-design-background-1.jpg) repeat-x fixed; 
      background-size: cover;
    }
         select{
@@ -34,7 +34,7 @@
   cursor: pointer;
   margin-top:1.5em;
   margin-right: 3em;
-  
+
 }
 
 .dropdown {
@@ -91,18 +91,18 @@ form{
     align: center;
     padding: 4px;
     margin: 0 auto;
-}      
+}
           </style>
           <script>
-  window.onload=function(){                                                                      
-  var i=0; var previous_hash = window.location.hash;                                           
-  var x = setInterval(function(){                                                              
-    i++; window.location.hash = "/noop/" + i;                                                  
-    if (i==10){clearInterval(x);                                                               
-      window.location.hash = previous_hash;}                                                   
+  window.onload=function(){
+  var i=0; var previous_hash = window.location.hash;
+  var x = setInterval(function(){
+    i++; window.location.hash = "/noop/" + i;
+    if (i==10){clearInterval(x);
+      window.location.hash = previous_hash;}
   },10);}
 
-  
+
   function checkCredentials() {
 
 var email = document.getElementById('username');
@@ -135,14 +135,14 @@ alert('login succesful');
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
           <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
           <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        
+
     </head>
     <body>
            <div class="dropdown" style="float:right;">
                     <button class="dropbtn">MENU</button>
                     <div class="dropdown-content">
-                    
-                    
+
+
                     <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\supervisor.html">SUPERVISOR</a>
                     <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\student.html">STUDENT'S LOGIN</a>
                     </div>
@@ -156,7 +156,7 @@ alert('login succesful');
                     <button type="submit" class="btn btn-success mx-5">login </button>
 
                     <br>
-                   
+
             </form>
 
             <script src="/app.js"></script>
