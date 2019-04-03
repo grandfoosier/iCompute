@@ -1,25 +1,8 @@
 var mysql = require("./mysql");
+var bodyParser = require("body-parser");
+var bcrypt = require("bcrypt");
 
 module.exports = {
-  /*
-  scoreSheet () {
-    return mysql.dbConnect()
-    .then((con) => {
-      var sql_scores  = "SELECT T.year AS Y, T.school, T.grade, Q.text, O.op_text, A.score "+
-                        "FROM   teams AS T, questions AS Q, mc_ops AS O, team_answers AS A, test_qs AS S "+
-                        "WHERE  A.test_q_id = S.test_q_id "+
-                        "AND    S.q_id = Q.q_id "+
-                        "AND    A.team_id = T.team_id "+
-                        "AND    A.mc_answer = O.mc_op_id";
-      return con.query(sql_scores)
-      .then((result) => {
-        con.end();
-        return result;
-      });
-    });
-  },
-  */
-
   getMCQs () {
     return mysql.dbConnect()
     .then((con) => {
@@ -139,6 +122,8 @@ module.exports = {
     });
   },
 
+/*//////////////////////////////////////////////////////////////////////////////
+
   getTestQs({grade})  {
     return mysql.dbConnect()
     .then(function (con) {
@@ -190,6 +175,58 @@ module.exports = {
         return
       })
     })
+  },
+
+//////////////////////////////////////////////////////////////////////////////*/
+
+  getSuper () {
+    return mysql.dbConnect()
+    .then((con) => {
+      var sql_get_sup = "SELECT supervisor_name AS name FROM supervisors";
+      return con.query(sql_get_sup)
+      .then((result) => {
+        con.end();
+        return result;
+      });
+    });
+  },
+
+  editSuper ({superName }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_s_edt = "UPDATE supervisors AS S "+
+                      "SET    S.supervisor_name = ? "+
+                      "WHERE  S.supervisor_id = 1";
+      return con.query(sql_s_edt, [superName])
+
+      .then(function (result) {
+        //console.log("super updated");
+        con.end();
+        return;
+      },
+      function (errorMessage) {
+        console.log("super not updated");
+      });
+    });
+  },
+
+  resetPwSuper ({superPW }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_s_set = "UPDATE supervisors "+
+                      "SET supervisor_pw_hash = ? "+
+                      "WHERE supervisor_id = 1";
+      return con.query(sql_s_set, [superPW])
+
+      .then(function (result) {
+        console.log("password set");
+        con.end();
+        return;
+      },
+      function (errorMessage) {
+        console.log("password not set");
+      });
+    });
   },
 
   getGraders () {
@@ -387,5 +424,58 @@ module.exports = {
         console.log("password not set");
       });
     });
-  }
+  },
+
+////////////////////////////////////////////////////////////////////////////////
+
+  submitScore ({t_id }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      console.log(t_id)
+      var submitScore = "SELECT Q.text AS question, O.op_text AS answer, A.score " +
+      "FROM team_answers AS A, mc_ops aS O, questions AS Q, teams AS T, test_qs AS X " +
+      "WHERE A.team_id = T.team_id " +
+      "AND A.test_q_id = X.test_q_id " +
+      "AND A.mc_answer = O.mc_op_id " +
+      "AND O.q_id = Q.q_id " +
+      "AND T.team_id = ?";
+      console.log(submitScore)
+      return con.query(submitScore, [t_id])
+      .then(function (result) {
+        console.log(result)
+        con.end();
+        return result;
+      },
+      function (errorMessage) {
+        console.log("Error");
+      });
+    });
+  },
+
+////////////////////////////////////////////////////////////////////////////////
+
+  validateGrader ({graderName, graderPW }) {
+  return mysql.dbConnect()
+  .then(function (con) {
+
+    var sql_g_validate = 'SELECT * FROM graders WHERE grader_name = ?';
+    con.query(sql_g_validate, [graderName, graderPW],function (err, result) {
+      if (err) throw err;
+      var test = JSON.stringify(result);
+      var y=JSON.parse(test);
+      username=y[0].grader_name;
+      password=y[0].grader_pw_hash;
+
+      if(graderName===username){
+
+        bcrypt.compare("pass", password, function(err, res) {
+          console.log("login succesful");
+
+      });
+      }else{
+        console.log("check the credentials");
+      }
+    })
+  });
+}
 }

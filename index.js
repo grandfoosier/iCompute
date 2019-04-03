@@ -34,20 +34,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+////////////////////////////////////////////////////////////////////////////////
+
 app.get('/mcqTest', mcqTest.getMCQTest)
 app.get('/addAns', mcqTest.addAns)
 app.get('/reviewAns',  mcqTest.reviewAns)
 app.get('/mcqGetOne', mcqTest.mcqGetOne)
 app.get('/mcqSubmit', mcqTest.mcqSubmit)
 
+////////////////////////////////////////////////////////////////////////////////
+
 app.get('/csvPage',getTeamScores.getYears)
 
 app.get('/getCSV', getTeamScores.getCSV)
+
+////////////////////////////////////////////////////////////////////////////////
 
 app.get('/teamLogin',teamLogin.getSchools)
 
 app.post('/checkTeamPass',teamLogin.checkTeamPass)
 
+////////////////////////////////////////////////////////////////////////////////
 
 app.get('/getMCQs', (req, res) => {
   DB.getMCQs()
@@ -88,6 +95,8 @@ app.post('/removeMCQ', (req, res) => {
   });
 });
 
+/*///////////////////////////////////////////////////////////////////////////////
+
 app.post('/getTestQs', (req, res) => {
   DB.getTestQs({
     grade: req.body.grade})
@@ -111,6 +120,30 @@ app.post('/delFromTest', (req, res) => {
     grade: req.body.grade})
   .then((response) => {
     return response;
+  });
+});
+
+//////////////////////////////////////////////////////////////////////////////*/
+
+app.get('/getSuper', (req, res) => {
+  DB.getSuper()
+  .then(function (result) {
+    res.status(200).send(result);
+  });
+});
+
+app.post('/editSuper', (req, res) => {
+  DB.editSuper({
+    superName: req.body.superName
+  });
+});
+
+app.post('/resetPwSuper', (req, res) => {
+  var pw = req.body.superPW;
+  bcrypt.hash(pw, saltRounds, function(err, hash) {
+    DB.resetPwSuper({
+     superPW: hash
+    });
   });
 });
 
@@ -198,7 +231,42 @@ app.post('/resetPwTeam', (req, res) => {
   });
 });
 
+////////////////////////////////////////////////////////////////////////////////
 
+app.post('/submitScore', (req, res) => {
+
+
+                var t_id = req.body.t_id
+                console.log(t_id)
+                DB.submitScore({
+
+                                t_id: req.body.t_id
+
+                }).then((response) => {
+
+                                //console.log(response);
+
+                                res.json(response);
+
+                                //res.status(200).send(response);
+
+                });
+
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
+app.post('/validateGrader', (req, res) => {
+  var pw = req.body.graderPW;
+  bcrypt.hash(pw, saltRounds, function(err, hash) {
+    DB.validateGrader({
+     graderName: req.body.graderName,
+     graderPW: hash
+    });
+  });
+});
+
+////////////////////////////////////////////////////////////////////////////////
 /* Test Questions */
 app.get('/getMCQs', (req, res) => {
   testQs
@@ -235,6 +303,8 @@ app.post('/delFromTest', (req, res) => {
       return response
     })
 })
+
+////////////////////////////////////////////////////////////////////////////////
 
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');

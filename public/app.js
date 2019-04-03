@@ -13,7 +13,7 @@ try{
     const ops = new Set([option1, option2, option3, option4]);
     if (ops.size == 4) {
       post('/addMCQ', {q_year, question, option1, option2, option3, option4, corr_op });
-      window.location.href='/manageMCQs/';
+      window.location.href='/superDash/manageMCQs/';
     } else {
       console.log('Options are not distinct');
     }
@@ -36,12 +36,14 @@ try{
     const ops = new Set([option1, option2, option3, option4]);
     if (ops.size == 4) {
       post('/editMCQ', {q_id, o_id, q_year, question, option1, option2, option3, option4, corr_op });
-      window.location.href='/manageMCQs/';
+      window.location.href='/superDash/manageMCQs/';
     } else {
       console.log('Options are not distinct');
     }
   });
 }catch(e){}
+
+////////////////////////////////////////////////////////////////////////////////
 
 try{
   const ChooseGrade = document.querySelector('.SelectDBPage')
@@ -52,34 +54,6 @@ try{
     get('/testmcq.html', {grade});
   });
 }catch(e){}
-
-/*
-try{
-  const AddToTest = document.querySelector('.AllMCQ')
-  AddToTest.addEventListener('submit', (e) => {
-    e.preventDefault();
-    var ref = window.location.href;
-    var grade = (ref.substring(ref.length - 1, ref.length));
-    var dd = document.getElementById('mcq_dd');
-    var q_id = dd.options[dd.selectedIndex].value;
-    post('/addToTest', {q_id, grade});
-    window.location.href='/testmcq.html?grade='+ grade;
-  });
-}catch(e){}
-
-try{
-  const DelFromTest = document.querySelector('.TestMCQ')
-  DelFromTest.addEventListener('submit', (e) => {
-    e.preventDefault();
-    var ref = window.location.href;
-    var grade = (ref.substring(ref.length - 1, ref.length));
-    var dd = document.getElementById('test_dd');
-    var q_id = dd.options[dd.selectedIndex].value;
-    post('/delFromTest', {q_id, grade});
-    window.location.href='/testmcq.html?grade='+ grade
-  });
-}catch(e){}
-*/
 
 try{
   const AddToTestL = document.querySelector('.AllMCQs')
@@ -92,7 +66,7 @@ try{
         q_id = this.value;
         post('/addToTest', {q_id, grade});
       }
-      window.location.href='/testmcqlists.html?grade='+ grade;
+      window.location.href='/superDash/testmcqlists.html?grade='+ grade;
     });
   });
 }catch(e){}
@@ -109,8 +83,30 @@ try{
         console.log(q_id);
         post('/delFromTest', {q_id, grade});
       }
-      window.location.href='/testmcqlists.html?grade='+ grade;
+      window.location.href='/superDash/testmcqlists.html?grade='+ grade;
     });
+  });
+}catch(e){}
+
+////////////////////////////////////////////////////////////////////////////////
+
+try{
+  const editSuper = document.querySelector('.editSuper');
+  editSuper.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const superName = editSuper.querySelector('.superName').value;
+    post('/editSuper', {superName});
+    window.location.href='/superDash/';
+  });
+}catch(e){}
+
+try{
+  const resetPwSuper = document.querySelector('.resetPwSuper');
+  resetPwSuper.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const superPW = resetPwSuper.querySelector('.superPW').value;
+    post('/resetPwSuper', {superPW});
+    window.location.href='/superDash/';
   });
 }catch(e){}
 
@@ -121,7 +117,7 @@ try{
     const graderName = addGrader.querySelector('.graderName').value;
     const graderPW = addGrader.querySelector('.graderPW').value;
     post('/addGrader', {graderName, graderPW });
-    window.location.href='/manageGraders/';
+    window.location.href='/superDash/manageGraders/';
   });
 }catch(e){}
 
@@ -132,7 +128,7 @@ try{
     const graderName = editGrader.querySelector('.graderName').value;
     const g_id = editGrader.querySelector('.g_id').value;
     post('/editGrader', {g_id, graderName});
-    window.location.href='/manageGraders/';
+    window.location.href='/superDash/manageGraders/';
   });
 }catch(e){}
 
@@ -144,7 +140,7 @@ try{
     var g_id = dd.options[dd.selectedIndex].value;
     const graderPW = resetPwGrader.querySelector('.graderPW').value;
     post('/resetPwGrader', {g_id, graderPW });
-    window.location.href='/manageGraders/';
+    window.location.href='/superDash/manageGraders/';
   });
 }catch(e){}
 
@@ -158,7 +154,7 @@ try{
     const grade = getRVBN('teamGrade_op');
     const teamPW = addTeam.querySelector('.teamPW').value;
     post('/addTeam', {t_year, school, grade, teamPW });
-    window.location.href='/manageTeams/';
+    window.location.href='/superDash/manageTeams/';
   });
 }catch(e){}
 
@@ -171,7 +167,7 @@ try{
     const teamSchool = editTeam.querySelector('.teamSchool').value;
     const teamGrade = getRVBN('teamGrade_op');
     post('/editTeam', {t_id, teamYear, teamSchool, teamGrade });
-    window.location.href='/manageTeams/';
+    window.location.href='/superDash/manageTeams/';
   });
 }catch(e){}
 
@@ -183,9 +179,24 @@ try{
     var t_id = dd.options[dd.selectedIndex].value;
     const teamPW = resetPwTeam.querySelector('.teamPW').value;
     post('/resetPwTeam', {t_id, teamPW });
-    window.location.href='/manageTeams/';
+    window.location.href='/superDash/manageTeams/';
   });
 }catch(e){}
+
+////////////////////////////////////////////////////////////////////////////////
+
+try{
+  const validateGrader = document.querySelector('.validateGrader');
+  validateGrader.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const graderName = validateGrader.querySelector('.graderName').value;
+    const graderPW = validateGrader.querySelector('.graderPW').value;
+    post('/validateGrader', {graderName, graderPW });
+
+  });
+}catch(e){}
+
+////////////////////////////////////////////////////////////////////////////////
 
 function getRVBN(rName) {
   var radioButtons = document.getElementsByName(rName);
