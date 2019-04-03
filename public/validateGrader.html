@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+   <style>
+   
+        h1 {
+            text-align:left;
+            padding-left:2em; 
+            color:orange;
+            background-color:black; 
+            font-size: 2cm;
+            margin-top: 0%;            
+        }
+        h2{
+            text-decoration-style: solid;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 1cm;
+        }
+        body{ 
+     background: url(website-design-background-1.jpg) repeat-x fixed; 
+     background-size: cover;
+   }
+        select{
+            text-align:center;
+            font-size:100%;
+            width: 25%;
+
+        }
+        .dropbtn {
+  background-color:grey;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin-top:1.5em;
+  margin-right: 3em;
+  
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color:orange;
+}
+form{
+    background-color:darkgray;
+    margin-top: 4em;
+    margin-bottom: 4em;
+    margin-left: 25em;
+    margin-right: 25em;
+    padding-top:130px;
+    padding-bottom:130px;
+}
+
+#username{
+    width: 50%;
+    align: center;
+    padding: 4px;
+    margin: 0 auto;
+}
+
+
+#password{
+    width: 50%;
+    align: center;
+    padding: 4px;
+    margin: 0 auto;
+}      
+          </style>
+          <script>
+  window.onload=function(){                                                                      
+  var i=0; var previous_hash = window.location.hash;                                           
+  var x = setInterval(function(){                                                              
+    i++; window.location.hash = "/noop/" + i;                                                  
+    if (i==10){clearInterval(x);                                                               
+      window.location.hash = previous_hash;}                                                   
+  },10);}
+
+  
+  function checkCredentials() {
+
+var email = document.getElementById('username');
+var password = document.getElementById('password');
+
+var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+if (!filter.test(email.value)) {
+alert('Please provide a valid email address');
+email.focus;
+return false;
+}
+
+if(password.value.length <8) {
+  alert('Password should be atleast eight characters');
+password.focus;
+return false;
+}
+
+if(email.value=="knarayanan@emich.edu"&&password.value=="knarayanan")
+{
+alert('login succesful');
+}
+
+}
+          </script>
+           <head>
+          <title>icompute1.0</title>
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+          <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        
+    </head>
+    <body>
+           <div class="dropdown" style="float:right;">
+                    <button class="dropbtn">MENU</button>
+                    <div class="dropdown-content">
+                    
+                    
+                    <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\supervisor.html">SUPERVISOR</a>
+                    <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\student.html">STUDENT'S LOGIN</a>
+                    </div>
+            </div>
+            <h1><b><I>icompute</I></b></h1>
+             <form class="validateGrader" align="center" method="post">
+                    <h2>Grader Login</h2>
+                    <br><input type="text" class=" graderName form-control" placeholder="Username">
+                    <br><input type="text" class=" graderPW form-control"  placeholder="password">
+                    <br>
+                    <button type="submit" class="btn btn-success mx-5">login </button>
+
+                    <br>
+                   
+            </form>
+
+            <script src="/app.js"></script>
+          </body>
+</html>

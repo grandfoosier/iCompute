@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>iCompute team edit</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="#">iCompute</a>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav ml-auto">
+					<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="btn btn-link" href="../manageTeams/" role="button">Back</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container pt-5">
+		<div class="row justify-content-end">
+			<div class="col-4 pt-4">
+				<h1 class="font-weight-light text-right"> </h1>
+			</div>
+		</div>
+	</div>
+
+<!-- Body -->
+<body>
+  <div class="mx-5" align="center">
+    <form class="editTeam">
+      <h1>Edit a team</h1></br>
+      <input type="hidden" class="t_id" id="t_id" value="-1"></input>
+      <input type="hidden" class="teamYear" id="teamYear" value="-1"></input>
+
+      <textarea class="teamSchool" id="teamSchool" placeholder="School" rows="1" cols="75" required
+      ></textarea></br>
+
+      <div class="row justify-content-center">
+        <div class="col-1"><p>Grade</p></div>
+        <div class="col-1">
+          <input type="radio" id="grade4" name="teamGrade_op" value=4 required>
+          <a>4</a>
+        </div>
+        <div class="col-1">
+          <input type="radio" id="grade5" name="teamGrade_op" value=5 required>
+          <a>5</a>
+        </div>
+      </div><p></p>
+
+      <button type="submit" class="btn btn-secondary m-3">Update Team</button>
+    </form>
+  </div>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Optional JavaScript -->
+  <script src="/app.js"></script>
+  <script>
+  window.onload = function () {
+    var t_id = location.search.substring(1).split("=")[1];
+    get('/getTeams', {})
+    .then (function (response) {
+      return response.json()
+      .then (function (data) {
+        for (var key=0, size=data.length; key<size; key += 1) {
+          if (data[key].team_id == t_id) {
+            $("#t_id").val(data[key].team_id);
+            $("#teamYear").val(data[key].year);
+            $("#teamSchool").html(data[key].school);
+            if (data[key].grade == 4) {
+              $('input[name=teamGrade_op][value=4]').prop('checked',true)
+            }
+            else {
+              $('input[name=teamGrade_op][value=5]').prop('checked',true)
+            }
+          }
+        }
+      })
+    })
+  }
+  </script>
+</body>
+</html>

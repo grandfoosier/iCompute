@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>iCompute team addition</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="row mx-3 justify-content-end">
+    <a class="btn btn-link" href="../superDash/" role="button">Back</a>
+  </div>
+
+  <div class="ml-3">
+    <form class="getScores">
+      <h1>Retrieve team scores</h1>
+      <div class="row mx-3">
+        <select id="team_dd" class="col-9"></select></br>
+      </div>
+      <button onclick="getScores()">Select</button>
+    </form>
+  </div>
+
+  <div class="row m-3">
+    <table id="tableOfScores" class="table table-striped" style="width:100%"></table>
+  </div>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Optional JavaScript -->
+  <script src="/app.js"></script>
+  <script>
+    window.onload = function () {
+      get('/getTeams', {})
+      .then (function (response) {
+        return response.json()
+        .then (function (data) {
+          $('#team_dd').prepend('<option value="" disabled="disabled" selected="selected">Select</option>')
+          for (var key=0, size=data.length; key<size; key += 1) {
+            $("#team_dd").append(new Option(data[key].year + " : " + data[key].school +', grade '+ data[key].grade, data[key].team_id));
+          }
+        })
+      })
+    }
+
+    function getScores(objButton) {
+      var dd = document.getElementById('team_dd');
+      var t_id = dd.options[dd.selectedIndex].value;
+      console.log(t_id);
+      post('/submitScore', {'t_id': t_id})
+      .then (function (req, data) {
+        console.log('got response');
+        console.log(data);
+        var r = new Array(), j = -1;
+        r[++j] = '<thead><tr><th>Question</th><th>Answer</th><th>Score</th></tr></thead><tbody>';
+          for(var key=0, size=data.length; key<size; key++) {
+            r[++j] = '<tr><td>';
+            r[++j] = data[key].question;
+            r[++j] = '</td><td>';
+            r[++j] = data[key].answer;
+            r[++j] = '</td><td>';
+            r[++j] = parseInt(data[key].score);
+            r[++j] = '</td></tr></tbody>';
+          }
+          $('#tableOfScores').html(r.join(''));
+        });
+      }
+    </script>
+  </body>
+</html>

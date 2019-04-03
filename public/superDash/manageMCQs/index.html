@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>iCompute question management</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="#">iCompute</a>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav ml-auto">
+					<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="btn btn-link" href="../manageQs.html" role="button">Back</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container pt-5">
+		<div class="row justify-content-end">
+			<div class="col-4 pt-4">
+				<h1 class="font-weight-light text-right"> </h1>
+			</div>
+		</div>
+	</div>
+
+<!-- Body -->
+<body>
+  <div class="row m-5 justify-content-center">
+    <div class="col-3">
+      <a class="btn btn-block btn-success" href="addMCQ.html" role="button">Add</a>
+    </div>
+    <div class="col-3">
+      <a class="btn btn-block btn-warning" href="ERMCQ.html" role="button">Edit/Delete</a>
+    </div>
+  </div>
+
+  <div class="row m-3">
+    <table id="tableOfQs" class="table table-striped" style="width:100%"></table>
+  </div>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Optional JavaScript -->
+  <script src="/app.js"></script>
+  <script>
+  get('/getMCQs', {})
+  .then ((response) => {
+    return response.json()
+    .then ((data) => {
+      var r = new Array(), j = -1;
+      r[++j] =  '<thead>'+
+                  '<tr>'+
+                    '<th>Year</th>'+
+                    '<th>Question</th>'+
+                    '<th>Option A</th>'+
+                    '<th>Option B</th>'+
+                    '<th>Option C</th>'+
+                    '<th>Option D</th>'+
+                    '<th>Correct Option</th>'+
+                  '</tr>'+
+                '</thead>'+
+                '<tbody>'
+      for (var key=0, size=data.length; key<size; key++){
+        var corr_op;
+        r[++j] =  '<tr>'+
+                    '<td>'
+        r[++j] =      data[key].Y
+        r[++j] =    '</td>'+
+                    '<td>'
+        r[++j] =      data[key].Q
+        r[++j] =    '</td>'+
+                    '<td>'
+        r[++j] =      data[key].Os
+        if (data[key].C) {corr_op = "A"}
+        key++
+        r[++j] =    '</td>'+
+                    '<td>'
+        r[++j] =      data[key].Os
+        if (data[key].C) {corr_op = "B"}
+        key++
+        r[++j] =    '</td>'+
+                    '<td>'
+        r[++j] =      data[key].Os
+        if (data[key].C) {corr_op = "C"}
+        key++
+        r[++j] =    '</td>'+
+                    '<td>'
+        r[++j] =      data[key].Os
+        if (data[key].C) {corr_op = "D"}
+        r[++j] =    '</td>'+
+                    '<td>'
+        r[++j] =      corr_op
+        r[++j] =    '</td>'+
+                  '</tr>'
+      }
+      r[++j] =  '</tbody>'
+      $('#tableOfQs').html(r.join(''))
+    })
+  })
+  </script>
+</body>
+</html>
