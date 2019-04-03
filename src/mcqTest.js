@@ -76,6 +76,11 @@ addAns=exports.addAns=(req,res)=>{
     var teamId=req.session.teamId
     if(!qNo)
       qNo=0
+    if(teamAns==''){
+      console.log('Team Ans::: '+teamAns)
+      teamAns=null  
+    }
+    
 
     var sql_check = 'SELECT * FROM team_answers WHERE team_id=? AND test_q_id=?'
     con.query(sql_check,[teamId,testQId])
