@@ -7,40 +7,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/stylesheets/iCompute.css">
 </head>
 
 <!-- Navigation -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="#">iCompute</a>
-			<div class="collapse navbar-collapse" id="navbarResponsive">
-			<ul class="navbar-nav ml-auto">
-					<ul class="navbar-nav ml-auto">
-					<li class="nav-item"><a class="btn btn-link" href="../" role="button">Back</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<div class="container pt-5">
-		<div class="row justify-content-end">
-			<div class="col-4 pt-4">
-				<h1 class="font-weight-light text-right"> </h1>
-			</div>
-		</div>
-	</div>
+<nav class="navbar navbar-expand-lg navbar-default bg-muted shadow fixed-top">
+  <div class="container">
+    <span class="navbar-brand">iCompute</span>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="btn btn-link" href="../" role="button">Back</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container pt-5">
+  <div class="row justify-content-end">
+    <div class="col-4 pt-4">
+      <h1 class="font-weight-light text-right"> </h1>
+    </div>
+  </div>
+</div>
 
 <!-- Body -->
 <body>
   <div class="row m-5 justify-content-center">
-  	<div class="col-3">
-  	  <a class="btn btn-block btn-success" href="addGrader.html" role="button">Add</a>
-  	</div>
-  	<div class="col-3">
-  	  <a class="btn btn-block btn-warning" href="ERGrader.html" role="button">Edit/Remove</a>
-  	</div>
-  	<div class="col-3">
-  	  <a class="btn btn-block btn-info" href="resetPwGrader.html" role="button">Reset Password</a>
-  	</div>
+    <div class="col-3">
+      <a class="btn btn-block btn-success" href="addGrader.html" role="button">Add</a>
+    </div>
+    <div class="col-3">
+      <a class="btn btn-block btn-warning" href="ERGrader.html" role="button">Edit/Remove</a>
+    </div>
+    <div class="col-3">
+      <a class="btn btn-block btn-info" href="resetPwGrader.html" role="button">Reset Password</a>
+    </div>
   </div>
 
   <div class="row m-3">
@@ -54,28 +55,28 @@
   <!-- Optional JavaScript -->
   <script src="/app_Users.js"></script>
   <script>
-    get('/getGraders', {})
-	.then ((response) => {
-	  return response.json()
-	  .then ((data) => {
-	    var r = new Array(), j = -1;
-	    r[++j] =  '<thead>'+
-		            '<tr>'+
-				      '<th>Grader\'s name</th>'+
-				    '</tr>'+
-				  '</thead>'+
-				  '<tbody>'
-	    for (var key=0, size=data.length; key<size; key++){
-		  r[++j] =  '<tr>'+
-		              '<td>'
-		  r[++j] =      data[key].name
-		  r[++j] =    '</td>'+
-		            '</tr>'
-		}
-		r[++j] =  '</tbody>'
-	    $('#tableOfGraders').html(r.join(''))
-	  })
-	})
+  get('/getGraders', {})
+  .then ((response) => {
+    return response.json()
+    .then ((data) => {
+      var r = new Array(), j = -1;
+      r[++j] =  '<thead>'+
+                  '<tr>'+
+                    '<th>Grader\'s name</th>'+
+                  '</tr>'+
+                '</thead>'+
+                '<tbody>'
+      for (var key=0, size=data.length; key<size; key++){
+        r[++j] =  '<tr>'+
+                    '<td>'
+        r[++j] =      data[key].name
+        r[++j] =    '</td>'+
+                  '</tr>'
+      }
+      r[++j] =  '</tbody>'
+      $('#tableOfGraders').html(r.join(''))
+    })
+  })
   </script>
 </body>
 </html>
