@@ -28,7 +28,6 @@ module.exports = {
     .then(function (con) {
       var sql_q_add = "INSERT INTO questions (text, section_id, year) "+
                       "SELECT ?, 'A', "+ q_year +" "+
-                      "FROM   questions "+
                       "WHERE NOT EXISTS ("+
                         "SELECT text FROM questions "+
                         "WHERE  text = ? "+

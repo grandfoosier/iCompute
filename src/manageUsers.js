@@ -28,6 +28,7 @@ module.exports = {
         return;
       },
       function (errorMessage) {
+        console.log(errorMessage);
         console.log("super not updated");
       });
     });
@@ -71,7 +72,6 @@ module.exports = {
     .then(function (con) {
       var sql_g_add = "INSERT INTO graders (grader_name, grader_pw_hash) "+
                       "SELECT ?, ? "+
-                      "FROM   graders "+
                       "WHERE NOT EXISTS ("+
                         "SELECT grader_name FROM graders "+
                         "WHERE  grader_name = ?"+
@@ -79,7 +79,7 @@ module.exports = {
       return con.query(sql_g_add, [graderName, graderPW, graderName])
 
       .then(function (result) {
-        //console.log("grader added");
+        console.log("grader added");
         con.end();
         return;
       },
@@ -107,6 +107,7 @@ module.exports = {
         return;
       },
       function (errorMessage) {
+        console.log(errorMessage);
         console.log("grader not updated");
       });
     });
@@ -164,7 +165,6 @@ module.exports = {
     .then(function (con) {
       var sql_t_add = "INSERT INTO teams (school, team_pw_hash, grade, year) "+
                       "SELECT ?, ?, ?, ? "+
-                      "FROM   teams "+
                       "WHERE NOT EXISTS ("+
                         "SELECT school FROM teams "+
                         "WHERE  school = ? "+

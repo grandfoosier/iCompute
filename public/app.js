@@ -12,13 +12,13 @@ try {const AddToTestL = document.querySelector('.AllMCQs')
     e.preventDefault();
     var ref = window.location.href;
     var grade = (ref.substring(ref.length - 1, ref.length));
-    $('#tableOfMCQs tbody tr input:checkbox').each(function() {
-      if (this.checked) {
-        q_id = this.value;
-        post('/addToTest', {q_id, grade});
-      }
-      window.location.href='/superDash/testmcqlists.html?grade='+ grade;
-    });
+    if ($('#tableOfMCQs tbody tr input:checkbox:checked').length) {
+      var q_ids = [];
+      $('#tableOfMCQs tbody tr input:checkbox').each(function() {
+        if (this.checked) {q_ids.push(this.value); }
+      });
+      addtotest(0, grade, q_ids);
+    }
   });
 } catch(e){}
 
@@ -27,14 +27,13 @@ try {const DelFromTestL = document.querySelector('.TestMCQs')
     e.preventDefault();
     var ref = window.location.href;
     var grade = (ref.substring(ref.length - 1, ref.length));
-    $('#tableOfTestMCQs tbody tr input:checkbox').each(function() {
-      if (this.checked) {
-        q_id = this.value;
-        console.log(q_id);
-        post('/delFromTest', {q_id, grade});
-      }
-      window.location.href='/superDash/testmcqlists.html?grade='+ grade;
-    });
+    if ($('#tableOfTestMCQs tbody tr input:checkbox:checked').length) {
+      var q_ids = [];
+      $('#tableOfTestMCQs tbody tr input:checkbox').each(function() {
+        if (this.checked) {q_ids.push(this.value); }
+      });
+      delfromtest(0, grade, q_ids);
+    }
   });
 } catch(e){}
 
@@ -51,6 +50,26 @@ try {const validateGrader = document.querySelector('.validateGrader');
 } catch(e){}
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function addtotest (i, grade, q_ids) {
+  var q_id = q_ids[i];
+  post('/addToTest', {q_id, grade}, loopadd(i, grade, q_ids))
+};
+
+function loopadd (i, grade, q_ids) {
+  if (i+1==q_ids.length) {window.location.href='/superDash/testmcqlists.html?grade='+ grade;}
+  else {addtotest(i+1, grade, q_ids); }
+}
+
+function delfromtest (i, grade, q_ids) {
+  var q_id = q_ids[i];
+  post('/delFromTest', {q_id, grade}, loopdel(i, grade, q_ids));
+};
+
+function loopdel (i, grade, q_ids) {
+  if (i+1==q_ids.length) {window.location.href='/superDash/testmcqlists.html?grade='+ grade;}
+  else {delfromtest(i+1, grade, q_ids); }
+}
 
 function getRVBN(rName) {
   var radioButtons = document.getElementsByName(rName);

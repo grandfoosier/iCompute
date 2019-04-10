@@ -8,12 +8,12 @@ module.exports = {
     .then(function (con) {
       console.log(t_id)
       var submitScore = "SELECT Q.text AS question, O.op_text AS answer, A.score " +
-      "FROM team_answers AS A, mc_ops aS O, questions AS Q, teams AS T, test_qs AS X " +
-      "WHERE A.team_id = T.team_id " +
-      "AND A.test_q_id = X.test_q_id " +
-      "AND A.mc_answer = O.mc_op_id " +
-      "AND O.q_id = Q.q_id " +
-      "AND T.team_id = ?";
+                        "FROM team_answers AS A, mc_ops aS O, questions AS Q, teams AS T, test_qs AS X " +
+                        "WHERE A.team_id = T.team_id " +
+                        "AND A.test_q_id = X.test_q_id " +
+                        "AND A.mc_answer = O.mc_op_id " +
+                        "AND O.q_id = Q.q_id " +
+                        "AND T.team_id = ?";
       console.log(submitScore)
       return con.query(submitScore, [t_id])
       .then(function (result) {

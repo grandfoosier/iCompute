@@ -262,10 +262,11 @@ app.post('/addToTest', (req, res) => {
   testQs
     .addToTest({
       q_id: req.body.q_id,
-    grade: req.body.grade
-    }).then((response) => {
-      return response
+      grade: req.body.grade
     })
+    .then(function (result) {
+      res.status(200).send(result)
+    });
 })
 
 app.post('/delFromTest', (req, res) => {
@@ -273,10 +274,12 @@ app.post('/delFromTest', (req, res) => {
     .delFromTest({
       q_id: req.body.q_id,
     grade: req.body.grade
-    }).then((response) => {
-      return response
     })
-})
+    .then(function (result) {
+      res.status(200).send(result)
+    });
+});
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
