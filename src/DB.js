@@ -3,10 +3,9 @@ var bodyParser = require("body-parser");
 var bcrypt = require("bcrypt");
 
 module.exports = {
-  submitScore ({t_id }) {
+  getScores ({t_id }) {
     return mysql.dbConnect()
     .then(function (con) {
-      console.log(t_id)
       var submitScore = "SELECT Q.text AS question, O.op_text AS answer, A.score " +
                         "FROM team_answers AS A, mc_ops aS O, questions AS Q, teams AS T, test_qs AS X " +
                         "WHERE A.team_id = T.team_id " +
@@ -14,10 +13,9 @@ module.exports = {
                         "AND A.mc_answer = O.mc_op_id " +
                         "AND O.q_id = Q.q_id " +
                         "AND T.team_id = ?";
-      console.log(submitScore)
       return con.query(submitScore, [t_id])
+
       .then(function (result) {
-        console.log(result)
         con.end();
         return result;
       },

@@ -118,5 +118,32 @@ module.exports = {
         });
       }).catch(e => console.error(`${e}`));
     });
+  },
+
+  addScratchImg ({url, oldname}) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      console.log('db1');
+      console.log(oldname);
+      console.log(url);
+      var sql_i_add = "INSERT INTO images (old_name, url) "+
+                      "SELECT ?, ? "+
+                      "WHERE NOT EXISTS ("+
+                        "SELECT old_name FROM images "+
+                        "WHERE  old_name = ?"+
+                      ") LIMIT 1";
+      console.log(sql_i_add);
+      return con.query(sql_i_add, [oldname, url, oldname])
+
+      .then(function (result) {
+        console.log("image added");
+        con.end();
+        return;
+      },
+      function (errorMessage) {
+        console.log(errorMessage);
+        console.log("image not added");
+      });
+    });
   }
 }

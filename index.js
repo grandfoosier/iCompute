@@ -15,6 +15,11 @@ var getTeamScores=require('./src/getTeamScores')
 const testQs = require('./src/testQs')
 const teamLogin=require('./src/teamLogin')
 
+const multer = require("multer");
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
+require('dotenv').config();
+
 const app = express();
 
 app.use(express.static('public'));
@@ -94,6 +99,31 @@ app.post('/editMCQ', (req, res) => {
 app.post('/removeMCQ', (req, res) => {
   manageQs.removeMCQ({
     q_id: req.body.q_id
+  });
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+const storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: "ScratchImgs",
+  allowedFormats: ["jpg", "png"],
+  transformation: [{ width: 500, height: 500, crop: "limit" }]
+});
+const parser = multer({ storage: storage });
+
+app.post('/api/images', parser.single("image"), (req, res) => {
+  manageQs.addScratchImg({
+    url: req.file.url,
+    oldname: req.file.originalname
+  })
+  .then(function (result) {
+    res.status(200).send(result);
   });
 });
 
@@ -207,25 +237,11 @@ app.post('/resetPwTeam', (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-app.post('/submitScore', (req, res) => {
-
-
-                var t_id = req.body.t_id
-                console.log(t_id)
-                DB.submitScore({
-
-                                t_id: req.body.t_id
-
-                }).then((response) => {
-
-                                //console.log(response);
-
-                                res.json(response);
-
-                                //res.status(200).send(response);
-
-                });
-
+app.post('/getScores', (req, res) => {
+  DB.getScores({t_id: req.body.t_id})
+  .then(function (result) {
+    res.status(200).send(result);
+  });
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -279,7 +295,6 @@ app.post('/delFromTest', (req, res) => {
       res.status(200).send(result)
     });
 });
-
 
 ////////////////////////////////////////////////////////////////////////////////
 

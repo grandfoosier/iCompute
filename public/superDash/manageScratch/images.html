@@ -16,7 +16,7 @@
     <span class="navbar-brand">iCompute</span>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="btn btn-link" href="../superDash/" role="button">Back</a></li>
+        <li class="nav-item"><a class="btn btn-link" href="../manageQs.html" role="button">Back</a></li>
       </ul>
     </div>
   </div>
@@ -32,16 +32,12 @@
 
 <!-- Body -->
 <body>
-  <div class="row m-5">
-    <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="manageMCQs/" role="button">Multiple Choice</a>
-    </div>
-    <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="manageSAs.html" role="button">Short Answer</a>
-    </div>
-    <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="manageScratch/" role="button">Scratch</a>
-    </div>
+  <div class="mx-5" align="center">
+    <form action='/api/images' method="post" enctype="multipart/form-data">
+      <h1>Upload images for Scratch section</h1></br>
+      <input type='file' name='image' accept="image/png, image/jpeg"/>
+      <input type="submit" value="Upload" name="submit" />
+    </form>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
