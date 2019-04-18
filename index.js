@@ -8,10 +8,17 @@ const saltRounds = 10;
 var cookieSession = require('cookie-session')
 
 const DB = require('./src/DB');
+const manageQs = require('./src/manageQs');
+const manageUsers = require('./src/manageUsers');
 var mcqTest=require('./src/mcqTest')
 var getTeamScores=require('./src/getTeamScores')
 const testQs = require('./src/testQs')
 const teamLogin=require('./src/teamLogin')
+
+const multer = require("multer");
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
+require('dotenv').config();
 
 const app = express();
 
@@ -34,30 +41,37 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+////////////////////////////////////////////////////////////////////////////////
+
 app.get('/mcqTest', mcqTest.getMCQTest)
 app.get('/addAns', mcqTest.addAns)
 app.get('/reviewAns',  mcqTest.reviewAns)
 app.get('/mcqGetOne', mcqTest.mcqGetOne)
 app.get('/mcqSubmit', mcqTest.mcqSubmit)
 
+////////////////////////////////////////////////////////////////////////////////
+
 app.get('/csvPage',getTeamScores.getYears)
 
 app.get('/getCSV', getTeamScores.getCSV)
+
+////////////////////////////////////////////////////////////////////////////////
 
 app.get('/teamLogin',teamLogin.getSchools)
 
 app.post('/checkTeamPass',teamLogin.checkTeamPass)
 
+////////////////////////////////////////////////////////////////////////////////
 
 app.get('/getMCQs', (req, res) => {
-  DB.getMCQs()
+  manageQs.getMCQs()
   .then(function (result) {
     res.status(200).send(result);
   });
 });
 
 app.post('/addMCQ', (req, res) => {
-  DB.addMCQ({
+  manageQs.addMCQ({
     q_year: req.body.q_year,
     question: req.body.question,
     option1: req.body.option1,
@@ -69,7 +83,7 @@ app.post('/addMCQ', (req, res) => {
 });
 
 app.post('/editMCQ', (req, res) => {
-  DB.editMCQ({
+  manageQs.editMCQ({
     q_id: req.body.q_id,
     o_id: req.body.o_id,
     q_year: req.body.q_year,
@@ -83,39 +97,62 @@ app.post('/editMCQ', (req, res) => {
 });
 
 app.post('/removeMCQ', (req, res) => {
-  DB.removeMCQ({
+  manageQs.removeMCQ({
     q_id: req.body.q_id
   });
 });
 
-app.post('/getTestQs', (req, res) => {
-  DB.getTestQs({
-    grade: req.body.grade})
+////////////////////////////////////////////////////////////////////////////////
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+const storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: "ScratchImgs",
+  allowedFormats: ["jpg", "png"],
+  transformation: [{ width: 500, height: 500, crop: "limit" }]
+});
+const parser = multer({ storage: storage });
+
+app.post('/api/images', parser.single("image"), (req, res) => {
+  manageQs.addScratchImg({
+    url: req.file.url,
+    oldname: req.file.originalname
+  })
   .then(function (result) {
     res.status(200).send(result);
   });
 });
 
-app.post('/addToTest', (req, res) => {
-  DB.addToTest({
-    q_id: req.body.q_id,
-    grade: req.body.grade})
-  .then((response) => {
-    return response;
+////////////////////////////////////////////////////////////////////////////////
+
+app.get('/getSuper', (req, res) => {
+  manageUsers.getSuper()
+  .then(function (result) {
+    res.status(200).send(result);
   });
 });
 
-app.post('/delFromTest', (req, res) => {
-  DB.delFromTest({
-    q_id: req.body.q_id,
-    grade: req.body.grade})
-  .then((response) => {
-    return response;
+app.post('/editSuper', (req, res) => {
+  manageUsers.editSuper({
+    superName: req.body.superName
+  });
+});
+
+app.post('/resetPwSuper', (req, res) => {
+  var pw = req.body.superPW;
+  bcrypt.hash(pw, saltRounds, function(err, hash) {
+    manageUsers.resetPwSuper({
+     superPW: hash
+    });
   });
 });
 
 app.get('/getGraders', (req, res) => {
-  DB.getGraders()
+  manageUsers.getGraders()
   .then(function (result) {
     res.status(200).send(result);
   });
@@ -124,7 +161,7 @@ app.get('/getGraders', (req, res) => {
 app.post('/addGrader', (req, res) => {
   var pw = req.body.graderPW;
   bcrypt.hash(pw, saltRounds, function(err, hash) {
-    DB.addGrader({
+    manageUsers.addGrader({
      graderName: req.body.graderName,
      graderPW: hash
     });
@@ -132,14 +169,14 @@ app.post('/addGrader', (req, res) => {
 });
 
 app.post('/editGrader', (req, res) => {
-  DB.editGrader({
+  manageUsers.editGrader({
     g_id: req.body.g_id,
     graderName: req.body.graderName
   });
 });
 
 app.post('/removeGrader', (req, res) => {
-  DB.removeGrader({
+  manageUsers.removeGrader({
     g_id: req.body.g_id
   });
 });
@@ -147,7 +184,7 @@ app.post('/removeGrader', (req, res) => {
 app.post('/resetPwGrader', (req, res) => {
   var pw = req.body.graderPW;
   bcrypt.hash(pw, saltRounds, function(err, hash) {
-    DB.resetPwGrader({
+    manageUsers.resetPwGrader({
      g_id: req.body.g_id,
      graderPW: hash
     });
@@ -155,7 +192,7 @@ app.post('/resetPwGrader', (req, res) => {
 });
 
 app.get('/getTeams', (req, res) => {
-  DB.getTeams()
+  manageUsers.getTeams()
   .then(function (result) {
     res.status(200).send(result);
   });
@@ -164,7 +201,7 @@ app.get('/getTeams', (req, res) => {
 app.post('/addTeam', (req, res) => {
   var pw = req.body.teamPW;
   bcrypt.hash(pw, saltRounds, function(err, hash) {
-    DB.addTeam({
+    manageUsers.addTeam({
       t_year: req.body.t_year,
       school: req.body.school,
       grade: req.body.grade,
@@ -174,7 +211,7 @@ app.post('/addTeam', (req, res) => {
 });
 
 app.post('/editTeam', (req, res) => {
-  DB.editTeam({
+  manageUsers.editTeam({
     t_id: req.body.t_id,
     teamYear: req.body.teamYear,
     teamSchool: req.body.teamSchool,
@@ -183,7 +220,7 @@ app.post('/editTeam', (req, res) => {
 });
 
 app.post('/removeTeam', (req, res) => {
-  DB.removeTeam({
+  manageUsers.removeTeam({
     t_id: req.body.t_id
   });
 });
@@ -191,14 +228,35 @@ app.post('/removeTeam', (req, res) => {
 app.post('/resetPwTeam', (req, res) => {
   var pw = req.body.teamPW;
   bcrypt.hash(pw, saltRounds, function(err, hash) {
-    DB.resetPwTeam({
+    manageUsers.resetPwTeam({
      t_id: req.body.t_id,
      teamPW: hash
     });
   });
 });
 
+////////////////////////////////////////////////////////////////////////////////
 
+app.post('/getScores', (req, res) => {
+  DB.getScores({t_id: req.body.t_id})
+  .then(function (result) {
+    res.status(200).send(result);
+  });
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
+app.post('/validateGrader', (req, res) => {
+  var pw = req.body.graderPW;
+  bcrypt.hash(pw, saltRounds, function(err, hash) {
+    DB.validateGrader({
+     graderName: req.body.graderName,
+     graderPW: hash
+    });
+  });
+});
+
+////////////////////////////////////////////////////////////////////////////////
 /* Test Questions */
 app.get('/getMCQs', (req, res) => {
   testQs
@@ -220,10 +278,11 @@ app.post('/addToTest', (req, res) => {
   testQs
     .addToTest({
       q_id: req.body.q_id,
-    grade: req.body.grade
-    }).then((response) => {
-      return response
+      grade: req.body.grade
     })
+    .then(function (result) {
+      res.status(200).send(result)
+    });
 })
 
 app.post('/delFromTest', (req, res) => {
@@ -231,10 +290,13 @@ app.post('/delFromTest', (req, res) => {
     .delFromTest({
       q_id: req.body.q_id,
     grade: req.body.grade
-    }).then((response) => {
-      return response
     })
-})
+    .then(function (result) {
+      res.status(200).send(result)
+    });
+});
+
+////////////////////////////////////////////////////////////////////////////////
 
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');

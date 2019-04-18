@@ -1,3 +1,5 @@
 # Specify filepatterns you want git to ignore.
 
 node_modules/
+src/mysql.js
+.env
