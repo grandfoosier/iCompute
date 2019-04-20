@@ -31,6 +31,7 @@ getMCQTest=exports.getMCQTest=(req,res)=>{
   //grade hard coded to be changed later
   let grade=req.session.grade
   let year=req.session.year
+  let teamId=req.session.teamId
 
 console.log('grade::: '+req.session.grade)
 console.log('year::: '+req.session.year)
@@ -49,7 +50,7 @@ console.log('year::: '+req.session.year)
       var sql_q_with_ops='SELECT a.ans_id, t.test_q_id, a.mc_answer, q.text, o.mc_op_id, o.op_text, q.q_id, \
                           t.grade, t.year, a.team_id \
                           FROM questions AS q, mc_ops AS o, test_qs AS t LEFT JOIN team_answers AS a \
-                          ON a.test_q_id=t.test_q_id AND a.team_id=1 \
+                          ON a.test_q_id=t.test_q_id AND a.team_id='+teamId+' \
                           WHERE t.q_id=q.q_id AND q.q_id=o.q_id \
                           AND t.q_id='+result[0].q_id+' AND t.grade='+grade+
                           ' ORDER BY mc_op_id'
