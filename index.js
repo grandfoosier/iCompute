@@ -43,12 +43,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next){
-    
-    res.locals.session = req.session;
-    
-    res.locals.school=req.session.school
-    res.locals.grade=req.session.grade
+app.use(function(req, res, next) {
+  if (req.session && req.session.school) {
+        res.locals.school = req.session.school;
+        res.locals.grade = req.session.grade;
+      // finishing processing the middleware and run the route
+      next();
+  } else {
+    next();
+  }
 });
 
 ////////////////////////////////////////////////////////////////////////////////

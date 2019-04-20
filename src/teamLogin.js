@@ -52,7 +52,7 @@ checkTeamPass=exports.checkTeamPass=(req,res)=>{
          req.session.school=school
          req.session.grade=grade
          req.session.year=resPwd[0].year
-         
+
          res.render('teamHome',{teamId:resPwd[0].team_id, school, grade })
         } else {
          console.log("Passwords don't match")
