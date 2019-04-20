@@ -117,13 +117,62 @@ const storage = cloudinaryStorage({
 });
 const parser = multer({ storage: storage });
 
-app.post('/api/images', parser.single("image"), (req, res) => {
-  manageQs.addScratchImg({
-    url: req.file.url,
-    oldname: req.file.originalname
-  })
+app.get('/getScratch', (req, res) => {
+  manageQs.getScratch()
   .then(function (result) {
     res.status(200).send(result);
+  });
+});
+
+app.post('/addScratch', parser.array('scratchImgs', 10), async function (req, res, next) {
+  const today = new Date();
+  var q_year = today.getFullYear();
+  const question = req.body.question;
+  const data = await manageQs.addScratch({
+    q_year: q_year,
+    question: question
+  })
+  var q_id = data.insertId;
+  for (var i=0; i<req.files.length; i++) {
+    var oldname = req.files[i].originalname;
+    var url = req.files[i].url;
+    await manageQs.addScratchImg({
+      oldname: oldname,
+      url: url,
+      q_id: q_id
+    });
+  }
+  res.redirect('/superDash/manageScratch/');
+});
+
+app.post('/editScratch', (req, res) => {
+  manageQs.editScratch({
+    q_id: req.body.q_id,
+    q_year: req.body.q_year,
+    question: req.body.question
+  });
+});
+
+app.post('/removeScratch', (req, res) => {
+  const q_id = req.body.q_id
+  manageQs.getImages({q_id: q_id})
+
+  .then((result) => {
+    console.log(result);
+    var imgIds = [];
+    for (var i=0; i<result.length; i++) {
+      var url = result[i].url;
+      imgIds.push("ScratchImgs/"+url.substring(74, 94)); }
+    console.log(imgIds);
+    manageQs.removeScratch({q_id: q_id})
+
+    .then(function (result) {
+      if (result == "success") {
+        cloudinary.v2.api.delete_resources(imgIds,
+          function(error, result){console.log(result); })
+        .then((result) => {res.status(200).send(result); });
+      } else {res.status(200).send(result); }
+    });
   });
 });
 
@@ -258,9 +307,9 @@ app.post('/validateGrader', (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////
 /* Test Questions */
-app.get('/getMCQs', (req, res) => {
+app.get('/getQs', (req, res) => {
   testQs
-    .getMCQs()
+    .getQs()
     .then(function (result) {
       res.status(200).send(result)
   })

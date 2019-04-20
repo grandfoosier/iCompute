@@ -8,7 +8,7 @@ module.exports = {
       var sql_get_qoc = "SELECT questions.year AS Y, "+
                         "       questions.q_id AS ID, "+
                         "       questions.text AS Q, "+
-                        "       questions.section_id AS S, "+
+                        //"       questions.section_id AS S, "+
                         "       mc_ops.op_text AS Os, "+
                         "       mc_ops.mc_op_id AS OID, "+
                         "       mc_ops.correct AS C "+
@@ -120,20 +120,74 @@ module.exports = {
     });
   },
 
-  addScratchImg ({url, oldname}) {
+  getScratch () {
+    return mysql.dbConnect()
+    .then((con) => {
+      var sql_get_scr = "SELECT questions.year AS Y, "+
+                        "       questions.q_id AS ID, "+
+                        "       questions.text AS Q "+
+                        "FROM   questions "+
+                        "WHERE  questions.section_id = 'C' "+
+                        "ORDER BY ID DESC";
+      return con.query(sql_get_scr)
+
+      .then((result) => {
+        con.end();
+        return result;
+      });
+    });
+  },
+
+  getImages ({q_id}) {
+    return mysql.dbConnect()
+    .then((con) => {
+      var sql_get_img = "SELECT images.old_name, images.url "+
+                        "FROM   images "+
+                        "WHERE  images.q_id = ? "+
+                        "ORDER BY q_id DESC";
+      return con.query(sql_get_img, [q_id])
+
+      .then((result) => {
+        con.end();
+        return result;
+      });
+    });
+  },
+
+  addScratch ({q_year, question }) {
     return mysql.dbConnect()
     .then(function (con) {
-      console.log('db1');
-      console.log(oldname);
-      console.log(url);
-      var sql_i_add = "INSERT INTO images (old_name, url) "+
-                      "SELECT ?, ? "+
+      var sql_s_add = "INSERT INTO questions (text, section_id, year) "+
+                        "SELECT ?, 'C', ? "+
+                        "WHERE NOT EXISTS ("+
+                        "SELECT text FROM questions "+
+                        "WHERE  text = ? "+
+                        "AND    year = ?"+
+                      ") LIMIT 1";
+      return con.query(sql_s_add, [question, q_year, question, q_year])
+
+      .then(function (result) {
+        console.log("scratch question added");
+        con.end();
+        return result;
+      },
+      function (errorMessage) {
+        console.log("question not added");
+      });
+    });
+  },
+
+  addScratchImg ({q_id, url, oldname}) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_i_add = "INSERT INTO images (old_name, url, q_id) "+
+                      "SELECT ?, ?, ? "+
                       "WHERE NOT EXISTS ("+
                         "SELECT old_name FROM images "+
-                        "WHERE  old_name = ?"+
+                        "WHERE  old_name = ? "+
+                        "AND    q_id = ?"+
                       ") LIMIT 1";
-      console.log(sql_i_add);
-      return con.query(sql_i_add, [oldname, url, oldname])
+      return con.query(sql_i_add, [oldname, url, q_id, oldname, q_id])
 
       .then(function (result) {
         console.log("image added");
@@ -145,5 +199,34 @@ module.exports = {
         console.log("image not added");
       });
     });
-  }
+  },
+
+  removeScratch ({q_id }) {
+    return mysql.dbConnect()
+    .then(function(con) {
+      var sql_q_test = "SELECT * FROM test_qs WHERE q_id = "+ q_id;
+      return con.query(sql_q_test)
+
+      .then(result => {
+        if (result.length != 0) {throw new Error("Question is being used"); }
+        var sql_i_del = "DELETE FROM images WHERE q_id = "+ q_id;
+        return con.query(sql_i_del)
+
+        .then((result) => {
+          //console.log("images deleted");
+          var sql_q_del = "DELETE FROM questions WHERE q_id = "+ q_id;
+          return con.query(sql_q_del)
+
+          .then((result) => {
+            //console.log("question deleted");
+            con.end();
+            return "success";
+          });
+        });
+      }).catch(e => {
+        console.error(`${e}`)
+        return "failure";
+      });
+    });
+  },
 }
