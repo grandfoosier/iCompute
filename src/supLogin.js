@@ -16,7 +16,6 @@ const path= require('path');
 
 checkSup=exports.checkSup=(req,res)=>{
   var con
-  console.log("here")
   const saltRounds = 10;
   let username=req.body.username
   let pwd=req.body.password
@@ -26,18 +25,18 @@ checkSup=exports.checkSup=(req,res)=>{
     con=c
 
     var sql_getPwd='select supervisor_name as username, supervisor_pw_hash as pwd from supervisors'
-    console.log(sql_getPwd)
-    console.log('Entered password: '+pwd)
     con.query(sql_getPwd)
     .then((resPwd)=>{
       con.end()
+      console.log('User entered: '+username+'  '+pwd)
+      console.log('database username: '+resPwd[0].username)
       bcrypt.compare(pwd, resPwd[0].pwd, function(err, ress) {
-        if(ress) {
+        if(ress && username==resPwd[0].username) {
 
          console.log("Passwords match")
          req.session.username=username
          req.session.pwd=pwd
-         res.sendFile(path.join(__dirname+'/index.html'));
+         res.sendFile(path.join(__dirname,'../public/superDash','index.html'));
         } else {
          console.log("Passwords don't match")
          let message='Login information incorrect'

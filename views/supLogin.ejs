@@ -16,7 +16,7 @@
             font-size: 1cm;
         }
         body{
-     background: url(website-design-background-1.jpg) repeat-x fixed;
+     background: url(/images/website-design-background-1.jpg) repeat-x fixed;
      background-size: cover;
    }
         select{
@@ -107,14 +107,6 @@ form{
                 window.location.hash = previous_hash;}
             },10);}
 
-
-
-
-
-            // if(username.value=="krish"&&password.value=="password")
-            // {
-            // alert('login successful');
-            // }
           </script>
 
 
@@ -123,12 +115,16 @@ form{
             <h1><b><I>icompute</I></b></h1>
 
              <form align="center" method="post" action="/checkSup">
-                    <h2>Supervisor login</h2><br/>
-                    <br><input type="text" name="supName" class="supervisorName form-control"  placeholder="Username">
-                    <br><input type="password" name="password" class="supervisorPW form-control"  placeholder="password" >
-                    <br>
-                    <p id="result"></p>
-                    <button class="btn btn-success mx-5">Login</button>
+                <% if(message===undefined || message!='Login information incorrect') { var message='' } %>
+                <h2>Supervisor login</h2><br/>
+                <% if(message!='') { %>
+                <label><font color="red"><%= message %></font></label><br>
+                <% } %>
+                <br><input type="text" name="username" placeholder="Username">
+                <br><br><input type="password" name="password" placeholder="password" >
+                <br><br>
+                <p id="result"></p>
+                <button class="btn btn-success mx-5">Login</button>
             </form>
     </body>
 </html>
