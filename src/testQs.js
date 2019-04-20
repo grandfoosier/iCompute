@@ -1,16 +1,14 @@
 var mysql = require("./mysql");
 
 module.exports = {
-	getMCQs () {
+	getQs () {
 		return mysql.dbConnect()
 		.then((con) => {
-		  var sql_get_qoc = "select questions.q_id as ID, "+
-		                    "       questions.text as Q, "+
-												"       mc_ops.op_text as Os, "+
-												"       mc_corrects.mc_op_id as C "+
-	                      "from   questions, mc_ops, mc_corrects "+
-	                      "where  mc_corrects.q_id = questions.q_id "+
-	                      "and    mc_ops.q_id = questions.q_id"
+		  var sql_get_qoc = "select distinct questions.text as Q, "+
+												"       questions.q_id as ID, "+
+		                    "       questions.section_id as S "+
+	                      "from   questions "+
+												"order by S, ID"
 		  return con.query(sql_get_qoc)
 		  .then((result) => {
 			con.end()
@@ -22,10 +20,11 @@ module.exports = {
 	getTestQs({grade})  {
 		return mysql.dbConnect()
 		.then(function (con) {
-		  var sql_q_sel = "select questions.text, test_qs.* "+
+		  var sql_q_sel = "select questions.text, questions.section_id, test_qs.* "+
 		                  "from   test_qs, questions "+
 										  "where  test_qs.q_id = questions.q_id "+
-										  "and    grade = "+grade
+										  "and    grade = "+grade+" "+
+											"order by questions.section_id, test_qs.test_q_id"
 		  return con.query(sql_q_sel)
 		  .then(function (result) {
 		    con.end()

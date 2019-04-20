@@ -71,19 +71,19 @@ window.onload = function () {
   var ref = window.location.href
   var grade = (ref.substring(ref.length - 1, ref.length))
 
-  get('/getMCQs', {})
+  get('/getQs', {})
   .then (function (response) {
     return response.json()
     .then (function (data) {
       var r = new Array(), j = -1;
       r[++j] = '<tbody>'
-      for (var key=0, size=data.length; key<size; key+=4) {
+      for (var key=0, size=data.length; key<size; key++) {
         r[++j] = '<tr>'+
                    '<td>'
         r[++j] =     '<input type="checkbox" id="chk" name="qs[]" value="'+ data[key].ID +'" />&nbsp;'
         r[++j] =   '</td>'+
                    '<td>'
-        r[++j] =     data[key].Q
+        r[++j] =     "Section "+ data[key].S +": "+ data[key].Q
         r[++j] =   '</td>'+
                  '</tr>'
       }
@@ -104,7 +104,7 @@ window.onload = function () {
         r[++j] =     '<input type="checkbox" id="chk" name="qs[]" value="'+ data[key].q_id +'" />&nbsp;'
         r[++j] =   '</td>'+
                    '<td>'
-        r[++j] =     data[key].text
+        r[++j] =     "Section "+ data[key].section_id +": "+ data[key].text
         r[++j] =   '</td>'+
                  '</tr>'
       }
