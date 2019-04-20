@@ -14,6 +14,8 @@ var mcqTest=require('./src/mcqTest')
 var getTeamScores=require('./src/getTeamScores')
 const testQs = require('./src/testQs')
 const teamLogin=require('./src/teamLogin')
+const scratchQ=require('./src/scratchQ')
+const supLogin = require('./src/supLogin')
 
 const multer = require("multer");
 const cloudinary = require("cloudinary");
@@ -41,6 +43,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+  if (req.session && req.session.school) {
+        res.locals.school = req.session.school;
+        res.locals.grade = req.session.grade;
+      // finishing processing the middleware and run the route
+      next();
+  } else {
+    next();
+  }
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
+app.get('/supLogin',(req,res)=>{
+  res.render('supLogin')
+})
+
+app.post('/checkSup',supLogin.checkSup) 
+
 ////////////////////////////////////////////////////////////////////////////////
 
 app.get('/mcqTest', mcqTest.getMCQTest)
@@ -48,6 +69,53 @@ app.get('/addAns', mcqTest.addAns)
 app.get('/reviewAns',  mcqTest.reviewAns)
 app.get('/mcqGetOne', mcqTest.mcqGetOne)
 app.get('/mcqSubmit', mcqTest.mcqSubmit)
+
+////////////////////////////////////////////////////////////////////////////////
+
+app.get('/scratchQ', scratchQ.getScratchQ)
+
+const multerConfig = {
+
+storage: multer.diskStorage({
+ //Setup where the user's file will go
+
+ destination: function(req, file, next){
+   next(null, './public/scratch_files');
+   
+   },   
+    
+    //Then give the file a unique name
+    filename: function(req, file, next){
+        const ext = path.extname(file.originalname)
+        next(null, req.session.school+req.session.year + '-' + req.session.grade +ext);
+      }
+    }),   
+    
+    //A means of ensuring only scratch files are uploaded. 
+    fileFilter: function(req, file, next){
+          if(!file){
+            next();
+          }
+          
+        const ext = path.extname(file.originalname)
+        let msg=''
+          
+        if(ext.substring(1,3)=='sb'){
+          console.log('photo uploaded');
+          msg='File uploaded successfully'
+          next(null, true);
+        }else{
+          console.log("file not supported");
+          msg='File not supported, select your scratch file'
+          //TODO:  A better message response to user on failure.
+          return next();
+        }
+    }
+  };
+
+  app.post('/upload',multer(multerConfig).single('scratchFile'),function(req,res){
+   res.render('teamHome');
+});
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -60,6 +128,10 @@ app.get('/getCSV', getTeamScores.getCSV)
 app.get('/teamLogin',teamLogin.getSchools)
 
 app.post('/checkTeamPass',teamLogin.checkTeamPass)
+
+app.get('/teamHome', (req, res) => {
+    res.render('teamHome');
+   })
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -17,8 +17,11 @@
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">iCompute</a>
+			<a class="navbar-brand" href="/teamHome">iCompute</a>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">Welcome <%= locals.school%> <%=locals.grade%>th grade</li>
+				</ul>
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item"><a class="nav-link" href="/teamLogin">logout</a></li>
 				</ul>
@@ -39,14 +42,16 @@
 	<div class="container">
 		<div class="row h-100 align-items-center">
 			<div class="col-12">
-				<div class="jumbotron">
+				<div class="jumbotron border border-white">
 					<p><b>Question <%= parseInt(qNo,10)+1 %></b></p>
 					<p><%= result[0]['text']%></p>
 					<form method="get">
 						<% for (var i = 0; i < result.length; i++) { %>
 						<% if(result[i]['mc_op_id']==result[i]['mc_answer']) { %>
+						&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="radio" name="options" value="<%=result[i]['mc_op_id']%>" checked> <%= result[i]['op_text'] %><br>
 						<% } else { %>
+						&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="radio" name="options" value="<%=result[i]['mc_op_id']%>"> <%= result[i]['op_text'] %><br>
 						<% } } %>
 						<input id="qNo" type="hidden" name="qNo" value="<%=qNo%>">
@@ -55,14 +60,14 @@
 						<input id="fromReview" type="hidden" name="fromReview" value="<%= fromReview %>">
 						<br>
 						<div class="btn-group">
-							<% if(qNo>0 && !fromReview) {%>
-							<button type="submit" formaction="/mcqTest" onclick="previous()">Previous</button>
-							&nbsp;&nbsp;&nbsp;&nbsp;
-							<% } if(qNo<4 && !fromReview) {%>
-							<button type="submit" formaction="/addAns" onclick="next()">Next</button>
-							<% } if(fromReview || qNo==4) { %>
-							 <br><button type="submit" formaction="/reviewAns" onclick="next()">Save: Review Answers</button>
-							 <% } %>
+						<% if(qNo>0 && !fromReview) {%>
+						<button class="btn-default m-2" type="submit" formaction="/mcqTest" onclick="previous()">Previous</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<% } if(qNo<4 && !fromReview) {%>
+						<button class="btn-default m-2" type="submit" formaction="/addAns" onclick="next()">Next</button>
+						<% } if(fromReview || qNo==4) { %>
+						 <br><button class="btn-default m-2" type="submit" formaction="/reviewAns" onclick="next()">Save: Review Answers</button>
+						 <% } %>
 						</div>
 					</form>
 				</div>
