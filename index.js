@@ -15,7 +15,7 @@ var getTeamScores=require('./src/getTeamScores')
 const testQs = require('./src/testQs')
 const teamLogin=require('./src/teamLogin')
 const scratchQ=require('./src/scratchQ')
-//const supLogin = require('./src/supLogin')
+const supLogin = require('./src/supLogin')
 
 const multer = require("multer");
 const cloudinary = require("cloudinary");
@@ -56,16 +56,11 @@ app.use(function(req, res, next) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// app.get('/supLogin', (req,res) => {
-//   console.log('Here')
-//   res.render('supLogin',{})
-// });
+app.get('/supLogin',(req,res)=>{
+  res.render('supLogin')
+})
 
-// app.get('/supLogin',(req,res)=>{
-//   res.render('supLogin')
-// })
-
-// app.post('/checkSup',supLogin.checkSup) 
+app.post('/checkSup',supLogin.checkSup) 
 
 ////////////////////////////////////////////////////////////////////////////////
 
