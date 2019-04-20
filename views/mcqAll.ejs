@@ -17,8 +17,11 @@
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#">iCompute</a>
+			<a class="navbar-brand" href="/teamHome">iCompute</a>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">Welcome <%= locals.school%> <%=locals.grade%>th grade</li>
+				</ul>
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item"><a class="nav-link" href="/teamLogin">logout</a></li>
 				</ul>
@@ -36,34 +39,40 @@
 	</div>
 
 	<div class="container">
-		<div class="row h-100 align-items-center">
+		<div class="row">
 			<div class="col-12">
-				<div class="jumbotron">
-					
-					<% for(var i=0; i<mcqAll.length; i++) {%>
-					<form method="get">
-					<b>Question <%= parseInt(i,10)+1 %></b>
-					<br><%= mcqAll[i].qInfo.q_text %>
-					<% for(var j=0; j<mcqAll[i].qOps.length; j++) {%>
-						<br><%= mcqAll[i].qOps[j].op_text %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<% if(mcqAll[i].qOps[j].mc_op_id==mcqAll[i].qInfo.mc_answer) {%>
-						<b>(Your selected answer)</b>
-						<% } } %>
-						<input id="qId" type="hidden" name="qId" value="<%= mcqAll[i].qInfo.q_id %>">
-						<input id="qNo" type="hidden" name="qNo" value="<%= parseInt(i,10) %>">
-						<input id="fromReview" type="hidden" name="fromReview" value="true">
-						<br>
-						<div class="btn-group">
-							<p><button type="submit" formaction="/mcqGetOne"> Edit my answer</button></p>
+				<div class="jumbotron border border-white">
+				<div class="row" m-2>
+				<% for(var i=0; i<mcqAll.length; i++) {%>
+				  <div class="col-md-6">
+ 				    <div class="well border border-secondary pt-3 pl-3 mb-3">	
+						<form method="get">
+						<b>Question <%= parseInt(i,10)+1 %></b>
+						<br><%= mcqAll[i].qInfo.q_text %>
+						<% for(var j=0; j<mcqAll[i].qOps.length; j++) {%>
+							<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= mcqAll[i].qOps[j].op_text %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<% if(mcqAll[i].qOps[j].mc_op_id==mcqAll[i].qInfo.mc_answer) {%>
+							<b>(Your selected answer)</b>
+							<% } } %>
+							<input id="qId" type="hidden" name="qId" value="<%= mcqAll[i].qInfo.q_id %>">
+							<input id="qNo" type="hidden" name="qNo" value="<%= parseInt(i,10) %>">
+							<input id="fromReview" type="hidden" name="fromReview" value="true">
+							<br>
+							<div class="btn-group mt-2">
+								<p><button class="btn-default" type="submit" formaction="/mcqGetOne"> Edit my answer</button></p>
+							</div>
+							<br>
+						</form>
 						</div>
-						<br>
-					</form>
-					<% } %>
-					<form method="get">
-						<div class="btn-group center">
-							<p><br><button class="btn btn-info" formaction="/mcqSubmit"> Submit Section A </button></p>
-						</div>
-					</form>
+					</div>
+				
+				<% } %>
+				</div>		
+				<form method="get">
+					<div class="text-center">
+						<p><br><button class="btn btn-info" formaction="/mcqSubmit"> Submit Section A </button></p>
+					</div>
+				</form>
 				</div>
 			</div>
 		</div>

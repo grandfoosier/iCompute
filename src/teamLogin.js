@@ -20,6 +20,7 @@ getSchools=exports.getSchools=(req,res,message)=>{
       con.query(sql_getSchool_5th)
       .then((result5th)=>{
         con.end()
+        
         res.render('teamLogin',{result4th,result5th,message})
       })
     })
@@ -51,6 +52,7 @@ checkTeamPass=exports.checkTeamPass=(req,res)=>{
          req.session.school=school
          req.session.grade=grade
          req.session.year=resPwd[0].year
+         
          res.render('teamHome',{teamId:resPwd[0].team_id, school, grade })
         } else {
          console.log("Passwords don't match")
