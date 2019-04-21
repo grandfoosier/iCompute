@@ -440,6 +440,13 @@ app.post('/getMCQScores', (req, res) => {
   });
 });
 
+app.post('/getSAScores', (req, res) => {
+  DB.getSAScores({t_id: req.body.t_id})
+  .then(function (result) {
+    res.status(200).send(result);
+  });
+});
+
 app.post('/getScratchScores', (req, res) => {
   DB.getScratchScores({t_id: req.body.t_id})
   .then(function (result) {

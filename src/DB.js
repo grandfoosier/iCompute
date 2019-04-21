@@ -25,6 +25,29 @@ module.exports = {
     });
   },
 
+  getSAScores ({t_id }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_get_s = "SELECT Q.text AS question, A.score " +
+                        "FROM team_answers AS A, questions AS Q, teams AS T, test_qs AS X " +
+                        "WHERE A.team_id = T.team_id " +
+                        "AND A.test_q_id = X.test_q_id " +
+                        "AND X.q_id = Q.q_id "+
+                        "AND T.team_id = ? "+
+                        "AND A.sa_answer IS NOT NULL";
+      console.log(sql_get_s);
+      return con.query(sql_get_s, [t_id])
+
+      .then(function (result) {
+        con.end();
+        return result;
+      },
+      function (errorMessage) {
+        console.log("Error");
+      });
+    });
+  },
+
   getScratchScores ({t_id }) {
     return mysql.dbConnect()
     .then(function (con) {

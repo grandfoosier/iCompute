@@ -87,20 +87,39 @@
       })
 
       .then(([r, j]) => {
-        post('/getScratchScores', {'t_id': t_id})
+        post('/getSAScores', {'t_id': t_id})
         .then (function (response) {
           return response.json()
           .then (function (data) {
             for(var key=0, size=data.length; key<size; key++) {
               r[++j] = '<tr><td>';
-              r[++j] = "Section C: "+ data[key].question;
+              r[++j] = "Section B: "+ data[key].question;
               r[++j] = '</td><td>';
               r[++j] = ""
               r[++j] = '</td><td>';
               r[++j] = parseInt(data[key].score);
               r[++j] = '</td></tr></tbody>';
             }
-            $('#tableOfScores').html(r.join(''));
+            return [r, j]
+          })
+
+          .then(([r, j]) => {
+            post('/getScratchScores', {'t_id': t_id})
+            .then (function (response) {
+              return response.json()
+              .then (function (data) {
+                for(var key=0, size=data.length; key<size; key++) {
+                  r[++j] = '<tr><td>';
+                  r[++j] = "Section C: "+ data[key].question;
+                  r[++j] = '</td><td>';
+                  r[++j] = ""
+                  r[++j] = '</td><td>';
+                  r[++j] = parseInt(data[key].score);
+                  r[++j] = '</td></tr></tbody>';
+                }
+                $('#tableOfScores').html(r.join(''));
+              });
+            });
           });
         });
       });
