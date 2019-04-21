@@ -60,7 +60,24 @@ app.use(function(req, res, next) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+app.all('*', function(req,res,next){
+  if (req.path === '/supLogin' || req.path === '/teamLogin' || req.path === '/graderLogin')
+  next();
+  else
+  {
+    if (!req.session)
+    {
+      res.redirect('/teamLogin') 
+    }
+    else
+      next();
+  } 
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
 app.get('/supLogin',(req,res)=>{
+  req.session=null
   res.render('supLogin')
 })
 

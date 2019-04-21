@@ -23,6 +23,7 @@ checkSup=exports.checkSup=(req,res)=>{
         if(ress && username==resPwd[0].username) {
 
          console.log("Passwords match")
+         req.session.supName=username
          // req.session.username=username
          // req.session.pwd=pwd
          res.sendFile(path.join(__dirname,'../public/superDash','index.html'));
@@ -33,7 +34,6 @@ checkSup=exports.checkSup=(req,res)=>{
 
         }
       })
-
     })
   })
 }
