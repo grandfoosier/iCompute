@@ -41,6 +41,18 @@ try {const editMCQ = document.querySelector('.editMCQ');
   });
 } catch(e){}
 
+try {const editScratch = document.querySelector('.editScratch');
+  editScratch.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('app');
+    const q_id = editScratch.querySelector('.q_id').value;
+    const q_year = editScratch.querySelector('.q_year').value;
+    const question = editScratch.querySelector('.question').value;
+    post('/editScratch', {q_id, q_year, question });
+    window.location.href='/superDash/manageScratch/';
+  });
+} catch(e){}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 function getRVBN(rName) {

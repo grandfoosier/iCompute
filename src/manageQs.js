@@ -201,6 +201,33 @@ module.exports = {
     });
   },
 
+  editScratch ({q_id, q_year, question }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      console.log('db');
+      var sql_s_edt = "UPDATE questions AS Q "+
+                        "SET Q.text = ? "+
+                        "WHERE Q.q_id = ? "+
+                        "AND NOT EXISTS ("+
+                          "SELECT q.text "+
+                          "FROM   (SELECT * FROM questions AS x) AS q "+
+                          "WHERE  q.text = ? "+
+                          "AND    q.year = ? "+
+                          "AND    q.q_id <> ?)";
+      console.log(sql_s_edt);
+      return con.query(sql_s_edt, [question, q_id, question, q_year, q_id])
+
+      .then(function (result) {
+        if (result.affectedRows == 0) {
+          console.log("Question already exists")
+          return;
+        }
+        console.log("question updated");
+        return "success";
+      });
+    });
+  },
+
   removeScratch ({q_id }) {
     return mysql.dbConnect()
     .then(function(con) {

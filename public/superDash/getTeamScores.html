@@ -30,7 +30,9 @@
 
 <!-- Body -->
 <body>
-  <div class="mx-5" align="center">
+  <div class="row m-3 justify-content-center">
+    <div id="bootTableQs" class="card col-11">
+      <div class="mx-5" align="center">
         <h1>Retrieve team scores</h1></br>
         <div class="row mx-3 justify-content-center">
           <select id="team_dd" class="col-6"></select>
@@ -38,8 +40,8 @@
         <button class="btn btn-primary m-3" onclick="getScores()">Select</button>
       </div>
 
-  <div class="row m-3">
-    <table id="tableOfScores" class="table table-striped" style="width:100%"></table>
+      <table id="tableOfScores" class="table table-striped" style="width:100%"></table>
+    </div>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -66,7 +68,7 @@
     var dd = document.getElementById('team_dd');
     var t_id = dd.options[dd.selectedIndex].value;
 
-    post('/getScores', {'t_id': t_id})
+    post('/getMCQScores', {'t_id': t_id})
     .then (function (response) {
       return response.json()
       .then (function (data) {
@@ -74,14 +76,33 @@
         r[++j] = '<thead><tr><th>Question</th><th>Answer</th><th>Score</th></tr></thead><tbody>';
         for(var key=0, size=data.length; key<size; key++) {
           r[++j] = '<tr><td>';
-          r[++j] = data[key].question;
+          r[++j] = "Section A: "+ data[key].question;
           r[++j] = '</td><td>';
           r[++j] = data[key].answer;
           r[++j] = '</td><td>';
           r[++j] = parseInt(data[key].score);
           r[++j] = '</td></tr></tbody>';
         }
-        $('#tableOfScores').html(r.join(''));
+        return [r, j]
+      })
+
+      .then(([r, j]) => {
+        post('/getScratchScores', {'t_id': t_id})
+        .then (function (response) {
+          return response.json()
+          .then (function (data) {
+            for(var key=0, size=data.length; key<size; key++) {
+              r[++j] = '<tr><td>';
+              r[++j] = "Section C: "+ data[key].question;
+              r[++j] = '</td><td>';
+              r[++j] = ""
+              r[++j] = '</td><td>';
+              r[++j] = parseInt(data[key].score);
+              r[++j] = '</td></tr></tbody>';
+            }
+            $('#tableOfScores').html(r.join(''));
+          });
+        });
       });
     });
   }

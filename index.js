@@ -81,7 +81,7 @@ app.all('*', function(req,res,next){
       console.log("3")
       res.redirect('/teamLogin')
     }
-  } 
+  }
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ app.get('/supLogin',(req,res)=>{
   res.render('supLogin')
 })
 
-app.post('/checkSup',supLogin.checkSup) 
+app.post('/checkSup',supLogin.checkSup)
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -123,25 +123,25 @@ storage: multer.diskStorage({
 
  destination: function(req, file, next){
    next(null, './public/scratch_files');
-   
-   },   
-    
+
+   },
+
     //Then give the file a unique name
     filename: function(req, file, next){
         const ext = path.extname(file.originalname)
         next(null, req.session.school+req.session.year + '-' + req.session.grade +ext);
       }
-    }),   
-    
-    //A means of ensuring only scratch files are uploaded. 
+    }),
+
+    //A means of ensuring only scratch files are uploaded.
     fileFilter: function(req, file, next){
           if(!file){
             next();
           }
-          
+
         const ext = path.extname(file.originalname)
         let msg=''
-          
+
         if(ext.substring(1,3)=='sb'){
           console.log('photo uploaded');
           msg='File uploaded successfully'
@@ -400,8 +400,15 @@ app.post('/resetPwTeam', (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-app.post('/getScores', (req, res) => {
-  DB.getScores({t_id: req.body.t_id})
+app.post('/getMCQScores', (req, res) => {
+  DB.getMCQScores({t_id: req.body.t_id})
+  .then(function (result) {
+    res.status(200).send(result);
+  });
+});
+
+app.post('/getScratchScores', (req, res) => {
+  DB.getScratchScores({t_id: req.body.t_id})
   .then(function (result) {
     res.status(200).send(result);
   });

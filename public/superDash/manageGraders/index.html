@@ -32,20 +32,22 @@
 
 <!-- Body -->
 <body>
-  <div class="row m-5 justify-content-center">
-    <div class="col-3">
-      <a class="btn btn-block btn-success" href="addGrader.html" role="button">Add</a>
-    </div>
-    <div class="col-3">
-      <a class="btn btn-block btn-warning" href="ERGrader.html" role="button">Edit/Remove</a>
-    </div>
-    <div class="col-3">
-      <a class="btn btn-block btn-info" href="resetPwGrader.html" role="button">Reset Password</a>
-    </div>
-  </div>
+  <div class="row m-3 justify-content-center">
+    <div id="bootTableQs" class="card col-11">
+      <div class="row m-5 justify-content-center">
+        <div class="col-3">
+          <a class="btn btn-block btn-success" href="addGrader.html" role="button">Add</a>
+        </div>
+        <div class="col-3">
+          <a class="btn btn-block btn-warning" href="ERGrader.html" role="button">Edit/Remove</a>
+        </div>
+        <div class="col-3">
+          <a class="btn btn-block btn-info" href="resetPwGrader.html" role="button">Reset Password</a>
+        </div>
+      </div>
 
-  <div class="row m-3">
-    <table id="tableOfGraders" class="table table-striped" style="width:100%"></table>
+      <table id="tableOfGraders" class="table table-striped" style="width:100%"></table>
+    </div>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
