@@ -16,6 +16,7 @@ const testQs = require('./src/testQs')
 const teamLogin=require('./src/teamLogin')
 const scratchQ=require('./src/scratchQ')
 const supLogin = require('./src/supLogin')
+const graderScratch=require('./src/graderScratch')
 
 const multer = require("multer");
 const cloudinary = require("cloudinary");
@@ -49,6 +50,9 @@ app.use(function(req, res, next) {
         res.locals.grade = req.session.grade;
       // finishing processing the middleware and run the route
       next();
+  } else if(req.session && req.session.graderName){
+    res.locals.graderName = req.session.graderName;
+    next();
   } else {
     next();
   }
@@ -63,6 +67,17 @@ app.get('/supLogin',(req,res)=>{
 app.post('/checkSup',supLogin.checkSup) 
 
 ////////////////////////////////////////////////////////////////////////////////
+
+app.get('/graderLogin',(req,res)=>{
+  req.session=null
+  res.render('graderLogin')
+})
+
+app.post('/checkGraderLogin',supLogin.checkGrader)
+
+app.post('/graderDownloadScratch',graderScratch.downloadScratch)
+
+///////////////////////////////////////////////////////////////////////////////
 
 app.get('/mcqTest', mcqTest.getMCQTest)
 app.get('/addAns', mcqTest.addAns)

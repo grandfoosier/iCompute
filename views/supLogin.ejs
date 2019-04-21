@@ -115,8 +115,8 @@ form{
       <div class="dropdown" style="float:right;">
         <button class="dropbtn">MENU</button>
         <div class="dropdown-content">
-        <a href="validateGrader.html">GRADER</a>
-        <a href="/teamLogin">TEAM</a>
+        <a href="/graderLogin">GRADER</a>
+        <a href="/teamLogin">TEAM LOGIN</a>
         </div>
       </div>
             <h1><b><I>icompute</I></b></h1>
@@ -127,8 +127,8 @@ form{
                 <% if(message!='') { %>
                 <label><font color="red"><%= message %></font></label><br>
                 <% } %>
-                <br><input type="text" name="username" placeholder="Username">
-                <br><br><input type="password" name="password" placeholder="password" >
+                <br><input type="text" name="username" placeholder="Name">
+                <br><br><input type="password" name="password" placeholder="Password" >
                 <br><br>
                 <p id="result"></p>
                 <button class="btn btn-success mx-5">Login</button>

@@ -40,9 +40,10 @@
 	</div>
 	
 	<div class="container">
-		<div class="row h-100 align-items-center">
-			<div class="col-12">
-				<div class="jumbotron border border-white">
+		<div class="row h-100 d-flex align-items-center">
+			<div class="col-12 ">
+				<div class="jumbotron border border-white d-flex align-items-center">
+					<div class="container">
 					<p><b>Question <%= parseInt(qNo,10)+1 %></b></p>
 					<p><%= result[0]['text']%></p>
 					<form method="get">
@@ -70,6 +71,7 @@
 						 <% } %>
 						</div>
 					</form>
+				</div>
 				</div>
 			</div>
 		</div>

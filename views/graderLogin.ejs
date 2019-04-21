@@ -103,31 +103,31 @@ form{
   },10);}
 
 
-  function checkCredentials() {
+//   function checkCredentials() {
 
-var email = document.getElementById('username');
-var password = document.getElementById('password');
+// var email = document.getElementById('username');
+// var password = document.getElementById('password');
 
-var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+// var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-if (!filter.test(email.value)) {
-alert('Please provide a valid email address');
-email.focus;
-return false;
-}
+// if (!filter.test(email.value)) {
+// alert('Please provide a valid email address');
+// email.focus;
+// return false;
+// }
 
-if(password.value.length <8) {
-  alert('Password should be atleast eight characters');
-password.focus;
-return false;
-}
+// if(password.value.length <8) {
+//   alert('Password should be atleast eight characters');
+// password.focus;
+// return false;
+// }
 
-if(email.value=="knarayanan@emich.edu"&&password.value=="knarayanan")
-{
-alert('login succesful');
-}
+// if(email.value=="knarayanan@emich.edu"&&password.value=="knarayanan")
+// {
+// alert('login succesful');
+// }
 
-}
+// }
           </script>
            <head>
           <title>icompute1.0</title>
@@ -141,21 +141,29 @@ alert('login succesful');
            <div class="dropdown" style="float:right;">
                     <button class="dropbtn">MENU</button>
                     <div class="dropdown-content">
-                    <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\supervisor.html">SUPERVISOR</a>
-                    <a href="C:\Users\cvsan\Documents\Website Design\iCompute-master\iCompute-master\public\student.html">TEAM LOGIN</a>
+                    <a href="/supLogin">SUPERVISOR</a>
+                    <a href="/teamLogin">TEAM LOGIN</a>
                     </div>
             </div>
             <h1><b><I>icompute</I></b></h1>
-             <form class="validateGrader" align="center" method="post">
-                    <h2>Grader Login</h2>
-                    <br><input type="text" placeholder="Username">
-                    <br><br><input type="text" placeholder="password">
-                    <br><br>
-                    <button type="submit" class="btn btn-success mx-5">login </button>
-                    <br>
+             <form align="center" action="/checkGraderLogin" method="post">
+              <% if(message===undefined || message!='Login information incorrect') { var message='' } %>
+              <h2>Grader Login</h2><br/>
+              <% if(message!='') { %>
+              <label><font color="red"><%= message %></font></label><br>
+              <% } %>
+              <br><input type="text" name="username" placeholder="Name">
+              <br><br><input type="password" name="password" placeholder="Password">
+              <br><br>
+              <button class="btn btn-success mx-5">login </button>
+              <br>
 
             </form>
 
             <script src="/app.js"></script>
           </body>
+
+     <script type="text/javascript">
+
+     </script>
 </html>
