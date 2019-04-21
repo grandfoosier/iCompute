@@ -61,16 +61,26 @@ app.use(function(req, res, next) {
 ////////////////////////////////////////////////////////////////////////////////
 
 app.all('*', function(req,res,next){
-  if (req.path === '/supLogin' || req.path === '/teamLogin' || req.path === '/graderLogin')
-  next();
+
+  if (req.session.school || req.session.graderName || req.session.supName)
+  {
+    console.log("2")
+    next();
+  }
   else
   {
-    if (!req.session)
+    if (req.path === '/supLogin' || req.path === '/teamLogin' || req.path === '/graderLogin'
+    || req.path === '/checkSup' || req.path === '/checkGraderLogin' || req.path === '/checkTeamPass')
     {
-      res.redirect('/teamLogin') 
+      console.log("1")
+      next();
     }
     else
-      next();
+    {
+      // console.log(req.session)
+      console.log("3")
+      res.redirect('/teamLogin')
+    }
   } 
 });
 

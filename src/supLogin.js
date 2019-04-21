@@ -20,7 +20,7 @@ checkSup=exports.checkSup=(req,res)=>{
       console.log('User entered: '+username+'  '+pwd)
       console.log('database username: '+resPwd[0].username)
       bcrypt.compare(pwd, resPwd[0].pwd, function(err, ress) {
-        if(ress && username==resPwd[0].username) {
+        if(ress && username.toLowerCase()==resPwd[0].username.toLowerCase()) {
 
          console.log("Passwords match")
          req.session.supName=username
