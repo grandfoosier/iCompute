@@ -246,11 +246,11 @@ app.post('/addScratch', parser.array('scratchImgs', 10), async function (req, re
     q_year: q_year,
     question: question
   })
-  var q_id = data.insertId;
+  var q_id = data.insertId; console.log("q_id: ", q_id);
   for (var i=0; i<req.files.length; i++) {
-    var oldname = req.files[i].originalname;
-    var url = req.files[i].url;
-    await manageQs.addScratchImg({
+    var oldname = req.files[i].originalname; console.log("oldname: ", oldname);
+    var url = req.files[i].url; console.log("url: ", url);
+    await manageQs.addImg({
       oldname: oldname,
       url: url,
       q_id: q_id
@@ -259,35 +259,68 @@ app.post('/addScratch', parser.array('scratchImgs', 10), async function (req, re
   res.redirect('/superDash/manageScratch/');
 });
 
-app.post('/editScratch', (req, res) => {
-  manageQs.editScratch({
+app.post('/editBorC', (req, res) => {
+  manageQs.editBorC({
     q_id: req.body.q_id,
     q_year: req.body.q_year,
     question: req.body.question
   });
 });
 
-app.post('/removeScratch', (req, res) => {
+app.post('/removeBorC', (req, res) => {
   const q_id = req.body.q_id
+  console.log("q_id: ", q_id)
   manageQs.getImages({q_id: q_id})
 
   .then((result) => {
-    console.log(result);
+    console.log("result: ", result);
     var imgIds = [];
     for (var i=0; i<result.length; i++) {
       var url = result[i].url;
       imgIds.push("ScratchImgs/"+url.substring(74, 94)); }
     console.log(imgIds);
-    manageQs.removeScratch({q_id: q_id})
+    manageQs.removeBorC({q_id: q_id})
 
     .then(function (result) {
       if (result == "success") {
-        cloudinary.v2.api.delete_resources(imgIds,
-          function(error, result){console.log(result); })
-        .then((result) => {res.status(200).send(result); });
+        if (imgIds.length > 0) {
+          cloudinary.v2.api.delete_resources(imgIds,
+            function(error, result){console.log(result); })
+          .then((result) => {res.status(200).send(result); });
+        } else {
+          res.status(200).send(result);
+        }
       } else {res.status(200).send(result); }
     });
   });
+});
+
+app.get('/getSA', (req, res) => {
+  manageQs.getSA()
+  .then(function (result) {
+    res.status(200).send(result);
+  });
+});
+
+app.post('/addSA', parser.array('saImgs', 10), async function (req, res, next) {
+  const today = new Date();
+  var q_year = today.getFullYear();
+  const question = req.body.question;
+  const data = await manageQs.addSA({
+    q_year: q_year,
+    question: question
+  })
+  var q_id = data.insertId;
+  for (var i=0; i<req.files.length; i++) {
+    var oldname = req.files[i].originalname;
+    var url = req.files[i].url;
+    await manageQs.addImg({
+      oldname: oldname,
+      url: url,
+      q_id: q_id
+    });
+  }
+  res.redirect('/superDash/manageSAs/');
 });
 
 ////////////////////////////////////////////////////////////////////////////////

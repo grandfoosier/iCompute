@@ -16,7 +16,7 @@
     <span class="navbar-brand">iCompute</span>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="btn btn-link" href="../manageScratch/" role="button">Back</a></li>
+        <li class="nav-item"><a class="btn btn-link" href="../manageSAs/" role="button">Back</a></li>
       </ul>
     </div>
   </div>
@@ -34,7 +34,7 @@
 <body>
   <div class="mx-5" align="center">
     <form class="editScratch">
-      <h1>Edit or remove a Scratch question</h1></br>
+      <h1>Edit or remove a short answer question</h1></br>
       <div class="row justify-content-center">
         <select id="S_dd" class="col-8" required></select></br>
       </div></br>
@@ -82,7 +82,7 @@
   <script src="/app_Qs.js"></script>
   <script>
   window.onload = function () {
-    get('/getScratch', {})
+    get('/getSA', {})
     .then (function (response) {
       return response.json()
       .then (function (data) {
@@ -98,10 +98,10 @@
     var q_id = dd.options[dd.selectedIndex].value;
     if (objButton.value == 'rem') {
       await post('/removeBorC', {q_id });
-      window.location.href='../manageScratch/';
+      window.location.href='../manageSAs/';
     }
     else {
-      window.location.href='editScratch.html?q_id='+q_id;
+      window.location.href='editSA.html?q_id='+q_id;
     }
   }
   </script>

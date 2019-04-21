@@ -48,8 +48,20 @@ try {const editScratch = document.querySelector('.editScratch');
     const q_id = editScratch.querySelector('.q_id').value;
     const q_year = editScratch.querySelector('.q_year').value;
     const question = editScratch.querySelector('.question').value;
-    post('/editScratch', {q_id, q_year, question });
+    post('/editBorC', {q_id, q_year, question });
     window.location.href='/superDash/manageScratch/';
+  });
+} catch(e){}
+
+try {const editSA = document.querySelector('.editSA');
+  editSA.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('app');
+    const q_id = editSA.querySelector('.q_id').value;
+    const q_year = editSA.querySelector('.q_year').value;
+    const question = editSA.querySelector('.question').value;
+    post('/editBorC', {q_id, q_year, question });
+    window.location.href='/superDash/manageSAs/';
   });
 } catch(e){}
 
