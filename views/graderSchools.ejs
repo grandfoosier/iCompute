@@ -41,29 +41,34 @@
     </div>
   </div>
   <br>
-  <form align="center" method="post" action="/graderDownloadScratch">
+  <form align="center" method="post">
   <div class="row m-3 form-group" align="center">
     <div class="col-4">
-      <select class="form-control" id="grade" name="grade" onchange="getSchool(this.value)">
-        <option value="grade" disabled selected >Grade</option>
-        <option value="4">4th</option>
-        <option value="5">5th</option>
+      <select class="form-control" id="grade" name="grade" onchange="getSchool(this.value)" required>
+        <option value="" name="grade" disabled selected>Grade</option>
+        <option name="grade" value="4">4th</option>
+        <option name="grade" value="5">5th</option>
       </select>
     </div>
     <div class="col-5">
-      <select class="form-control" id="school" name="school">
-        <option value="school" disabled="disabled" selected="selected">School</option>
+      <select class="form-control" id="school" name="school" required>
+        <option value="" name="school" disabled selected>School</option>
       </select>
     </div>
     <div class="col-3">
-      <button class="btn btn-primary" onclick="">Download Scratch File</button>
-    </div>
-  </form>
+      <button class="btn btn-primary" type="submit" formaction="/graderDownloadScratch" onclick="showScoreInput()">Download Scratch File</button>
+    </div><br><br>
   </div>
   <br><br><br>
-  <div class="" align="center">
-
+  <div id="scoreDiv" class="row m-3 form-group" align="center" style="display: none;">
+    <div class="col-6">
+      <b>Enter grades for this team<b><br><br><input class="form-control" type="text-right" name="score">
+    </div><br>
+    <div class="col-6">
+      <button class="btn btn-primary" type="submit" formaction="/gradeScratch">Save Grades</button>
+    </div>
   </div>
+  </form>
 </div>
 
   
@@ -75,14 +80,29 @@
   <!-- Optional JavaScript -->
   
   <script>
+    function showScoreInput(){
+      var school=document.getElementById("school").value
+      var grade=document.getElementById("grade").value
+
+      if(school!='' && grade!='')
+      {
+        var x = document.getElementById("scoreDiv");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    }
+      
+
     function getSchool(value) {
       var schools
-      var schOptions = "<option disabled selected>School</option>";
-      //alert(value.length)
+      var schOptions = "<option value='' disabled selected>School</option>";
+      
       if (value.length == 0) 
-        document.getElementById("school").innerHTML = "<option disabled selected>School</option>";
+        document.getElementById("school").innerHTML = "<option value='' disabled selected>School</option>";
       else{
-        //alert("<%= result4th[0].school %>");
         
         var grade = document.getElementById("grade");
         

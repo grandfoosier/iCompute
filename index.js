@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 var cookieSession = require('cookie-session')
+var url = require("url");
+
 
 const DB = require('./src/DB');
 const manageQs = require('./src/manageQs');
@@ -64,7 +66,6 @@ app.all('*', function(req,res,next){
 
   if (req.session.school || req.session.graderName || req.session.supName)
   {
-    console.log("2")
     next();
   }
   else
@@ -72,13 +73,10 @@ app.all('*', function(req,res,next){
     if (req.path === '/supLogin' || req.path === '/teamLogin' || req.path === '/graderLogin'
     || req.path === '/checkSup' || req.path === '/checkGraderLogin' || req.path === '/checkTeamPass')
     {
-      console.log("1")
       next();
     }
     else
     {
-      // console.log(req.session)
-      console.log("3")
       res.redirect('/teamLogin')
     }
   } 
@@ -102,7 +100,14 @@ app.get('/graderLogin',(req,res)=>{
 
 app.post('/checkGraderLogin',supLogin.checkGrader)
 
-app.post('/graderDownloadScratch',graderScratch.downloadScratch)
+app.post('/graderDownloadScratch',(req,res)=>{
+  graderScratch.downloadScratch(req,res)
+  
+})
+
+app.post('/gradeScratch',graderScratch.gradeTeamScr)
+
+//app.get('/graderDownloadScratch',graderScratch.callAnother)
 
 ///////////////////////////////////////////////////////////////////////////////
 
