@@ -1,5 +1,7 @@
 
 var mysql = require('./mysql')
+var teamLogin = require('./teamLogin')
+
 
 mcqGetOne=exports.mcqGetOne=(req,res)=>{
   var con
@@ -33,8 +35,8 @@ getMCQTest=exports.getMCQTest=(req,res)=>{
   let year=req.session.year
   let teamId=req.session.teamId
 
-console.log('grade::: '+req.session.grade)
-console.log('year::: '+req.session.year)
+// console.log('grade::: '+req.session.grade)
+// console.log('year::: '+req.session.year)
 
   return mysql.dbConnect()
   .then((c) => {
@@ -191,7 +193,7 @@ mcqSubmit=exports.mcqSubmit=(req, res)=>{
       .then((resultUpd)=>{
         let title='MCQ score updated'
         con.end()
-        res.render('teamHome',{})
+        teamLogin.goToTeamHome(req,res)
       })
     })
   })

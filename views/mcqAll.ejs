@@ -62,6 +62,7 @@
 								<p><button class="btn-default" type="submit" formaction="/mcqGetOne"> Edit my answer</button></p>
 							</div>
 							<br>
+
 						</form>
 						</div>
 					</div>
@@ -70,7 +71,12 @@
 				</div>		
 				<form method="get">
 					<div class="text-center">
-						<p><br><button class="btn btn-info" formaction="/mcqSubmit"> Submit Section A </button></p>
+						<p><br><button class="btn btn-info" data-toggle="confirmation"
+						        data-btn-ok-label="Continue" data-btn-ok-class="btn-success"
+						        data-btn-ok-icon-class="material-icons" data-btn-ok-icon-content="check"
+						        data-btn-cancel-label="Cancel" data-btn-cancel-class="btn-danger"
+						        data-btn-cancel-icon-class="material-icons" data-btn-cancel-icon-content="close"
+						        data-title="Confirm Submit" data-content="This will submit Section A, you will not be able to access Section A later" formaction="/mcqSubmit"> Submit Section A </button></p>
 					</div>
 				</form>
 				</div>

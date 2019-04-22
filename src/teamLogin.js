@@ -1,5 +1,6 @@
 var mysql = require('./mysql')
 const bcrypt = require('bcrypt');
+const DB = require('./DB');
 
 getSchools=exports.getSchools=(req,res,message)=>{
   var con
@@ -41,7 +42,6 @@ checkTeamPass=exports.checkTeamPass=(req,res)=>{
     con=c
     
     var sql_getPwd='SELECT team_id, team_pw_hash as pwd, year FROM teams WHERE grade='+grade+' AND school="'+school+'"'
-    console.log(sql_getPwd)
     con.query(sql_getPwd)
     .then((resPwd)=>{
       con.end()
@@ -53,7 +53,11 @@ checkTeamPass=exports.checkTeamPass=(req,res)=>{
          req.session.grade=grade
          req.session.year=resPwd[0].year
 
-         res.render('teamHome',{teamId:resPwd[0].team_id, school, grade })
+         DB.getMCQScores({t_id: resPwd[0].team_id})
+         .then(function (result) {
+            console.log(result.length)
+            res.render('teamHome',{teamId:resPwd[0].team_id, school, grade, result })
+          });
         } else {
          console.log("Passwords don't match")
          let message='Login information incorrect'
@@ -65,4 +69,17 @@ checkTeamPass=exports.checkTeamPass=(req,res)=>{
     })
     
   })
+}
+
+goToTeamHome=exports.goToTeamHome=(req,res)=>{
+  var con
+  console.log('In to team Home')
+  var teamId=req.session.teamId
+  var school=req.session.school
+  var grade=req.session.grade
+  DB.getMCQScores({t_id: teamId})
+  .then(function (result) {
+    console.log(result.length)
+    res.render('teamHome',{teamId, school, grade, result })
+  });
 }

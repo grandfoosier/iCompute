@@ -19,6 +19,7 @@ const teamLogin=require('./src/teamLogin')
 const scratchQ=require('./src/scratchQ')
 const supLogin = require('./src/supLogin')
 const graderScratch=require('./src/graderScratch')
+const saTest=require('./src/saTest')
 
 const multer = require("multer");
 const cloudinary = require("cloudinary");
@@ -109,8 +110,6 @@ app.post('/graderDownloadScratch',(req,res)=>{
 
 app.post('/gradeScratch',graderScratch.gradeTeamScr)
 
-//app.get('/graderDownloadScratch',graderScratch.callAnother)
-
 ///////////////////////////////////////////////////////////////////////////////
 
 app.get('/mcqTest', mcqTest.getMCQTest)
@@ -118,6 +117,11 @@ app.get('/addAns', mcqTest.addAns)
 app.get('/reviewAns',  mcqTest.reviewAns)
 app.get('/mcqGetOne', mcqTest.mcqGetOne)
 app.get('/mcqSubmit', mcqTest.mcqSubmit)
+
+app.get('/saTest',saTest.getSAQs)
+app.post('/addSaAns',saTest.addSaAns)
+
+app.get('/teamHome', teamLogin.goToTeamHome)
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -163,7 +167,8 @@ storage: multer.diskStorage({
   };
 
   app.post('/upload',multer(multerConfig).single('scratchFile'),function(req,res){
-   res.render('teamHome');
+   //res.render('teamHome');
+   teamLogin.goToTeamHome(req,res)
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,10 +183,13 @@ app.get('/teamLogin',teamLogin.getSchools)
 
 app.post('/checkTeamPass',teamLogin.checkTeamPass)
 
-app.get('/teamHome', (req, res) => {
-    res.render('teamHome');
-   })
+// app.get('/teamHome', (req, res) => {
+//     res.render('teamHome');
+//    })
 
+// app.post('/teamHome', (req, res) => {
+//     res.render('teamHome');
+//    })
 ////////////////////////////////////////////////////////////////////////////////
 
 app.get('/getMCQs', (req, res) => {

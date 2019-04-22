@@ -41,26 +41,30 @@
 	<!--Jumbotron-->
 	<div class="jumbotron text-center">
 		<div class="container">
-    <br><br>
+    <br>
 		<h1>Welcome to iCompute</h1><br>
-		<p>An event for 4th and 5th graders in WESO <br><br> Student's basic knowledge is tested in <i>Computing basics, Theoretical computing and Practical computing</i></p>
+		<p>An event for 4th and 5th graders in WESO <br> <!--Student's basic knowledge is tested in <i>Computing basics, Theoretical computing and Practical computing</i></p>-->
 		<br>
-		<a href="#" class="btn btn-primary">Read more</a>
+		<!--<a href="#" class="btn btn-primary">Read more</a>-->
 		</div>
 	</div>
   
-	<br><br>
+  <br>
 	<!--Buttons-->
 
 	<div class="row m-5">
     <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="/mcqTest" role="button">Multiple Choice Questions (MCQ)</a>
+      <% if(result.length==5) {%>
+      <a class="btn btn-block btn-secondary btn-lg" role="button"><br>Multiple Choice Questions <br> (MCQ)<br><br></a>
+      <% } else {%>
+      <a class="btn btn-block btn-info btn-lg" href="/mcqTest" role="button"><br>Multiple Choice Questions <br> (MCQ)<br><br></a>
+      <% } %>
     </div>
     <div class="col-4">
-      <a class="btn btn-block btn-secondary btn-lg" role="button">Short Answer Questions (SA)</a>
+      <a class="btn btn-block btn-info btn-lg" href="/saTest" role="button"><br>Short Answer Questions <br>(SA)<br><br></a>
     </div>
     <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="/scratchQ" role="button">Scratch Question</a>
+      <a class="btn btn-block btn-info btn-lg" href="/scratchQ" role="button"><br>Scratch Question<br><br><br></a>
     </div>
 	</div>
 	
