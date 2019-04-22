@@ -14,7 +14,7 @@ module.exports = {
                         "       mc_ops.correct AS C "+
                         "FROM   questions, mc_ops "+
                         "WHERE  mc_ops.q_id = questions.q_id "+
-                        "ORDER BY ID DESC";
+                        "ORDER BY ID DESC, OID ASC";
       return con.query(sql_get_qoc)
       .then((result) => {
         con.end();
