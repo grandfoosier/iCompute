@@ -100,6 +100,8 @@ app.get('/graderLogin',(req,res)=>{
 
 app.post('/checkGraderLogin',supLogin.checkGrader)
 
+app.get('/gradeSecC',graderScratch.graderSchoolsForScratch)
+
 app.post('/graderDownloadScratch',(req,res)=>{
   graderScratch.downloadScratch(req,res)
   

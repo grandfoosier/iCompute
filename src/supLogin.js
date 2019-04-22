@@ -63,7 +63,8 @@ checkGrader=exports.checkGrader=(req,res)=>{
            req.session.graderName=username
            // req.session.pwd=pwd
            let message='Login successful'
-           graderScratch.graderSchoolsForScratch(req, res)
+           res.render('graderChooseSec')
+           //graderScratch.graderSchoolsForScratch(req, res)
            //res.render('graderLogin',{})
           } else {
            console.log("Passwords don't match")
