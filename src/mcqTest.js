@@ -42,8 +42,8 @@ console.log('year::: '+req.session.year)
     let qNo=req.query["qNo"]
     if(qNo===undefined)
       qNo=0
-    var sql_test_qs = 'SELECT q_id FROM test_qs \
-                        WHERE grade='+grade+' AND year='+year+' \
+    var sql_test_qs = 'SELECT t.q_id FROM test_qs as t, questions as q \
+                        WHERE t.q_id=q.q_id AND grade='+grade+' AND t.year='+year+' AND section_id="A" \
                         ORDER BY test_q_id LIMIT '+qNo+',1'
     con.query(sql_test_qs)
     .then((result)=>{
