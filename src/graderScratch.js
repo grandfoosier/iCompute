@@ -35,7 +35,18 @@ downloadScratch=exports.downloadScratch=(req,res)=>{
 	let scratchFile = path.join(__dirname, '../'+'public/scratch_files/'+school + year + '-' +grade+'.sb3')
 	
 	console.log(scratchFile);
-	res.download(scratchFile)
+	res.download(scratchFile, function(err){
+		if(err) {
+	    // Check if headers have been sent
+	    if(res.headersSent) {
+	      // You may want to log something here or do something else
+	      console.log("Error while downloading file"+err)
+	    } else {
+	      //return res.sendStatus(404); // 404, maybe 500 depending on err
+	      graderSchoolsForScratch(req,res)
+	    }
+	  }
+	})
 		
 }
 
