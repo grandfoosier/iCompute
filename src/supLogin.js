@@ -61,6 +61,7 @@ checkGrader=exports.checkGrader=(req,res)=>{
 
            console.log("Passwords match")
            req.session.graderName=username
+           res.locals.graderName = req.session.graderName;
            // req.session.pwd=pwd
            let message='Login successful'
            res.render('graderChooseSec')
