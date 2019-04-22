@@ -141,10 +141,12 @@ module.exports = {
   getImages ({q_id}) {
     return mysql.dbConnect()
     .then((con) => {
+      console.log(q_id)
       var sql_get_img = "SELECT images.old_name, images.url "+
                         "FROM   images "+
                         "WHERE  images.q_id = ? "+
                         "ORDER BY q_id DESC";
+                        console.log(sql_get_img);
       return con.query(sql_get_img, [q_id])
 
       .then((result) => {
@@ -177,7 +179,7 @@ module.exports = {
     });
   },
 
-  addScratchImg ({q_id, url, oldname}) {
+  addImg ({q_id, url, oldname}) {
     return mysql.dbConnect()
     .then(function (con) {
       var sql_i_add = "INSERT INTO images (old_name, url, q_id) "+
@@ -201,7 +203,34 @@ module.exports = {
     });
   },
 
-  removeScratch ({q_id }) {
+  editBorC ({q_id, q_year, question }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      console.log('db');
+      var sql_s_edt = "UPDATE questions AS Q "+
+                        "SET Q.text = ? "+
+                        "WHERE Q.q_id = ? "+
+                        "AND NOT EXISTS ("+
+                          "SELECT q.text "+
+                          "FROM   (SELECT * FROM questions AS x) AS q "+
+                          "WHERE  q.text = ? "+
+                          "AND    q.year = ? "+
+                          "AND    q.q_id <> ?)";
+      console.log(sql_s_edt);
+      return con.query(sql_s_edt, [question, q_id, question, q_year, q_id])
+
+      .then(function (result) {
+        if (result.affectedRows == 0) {
+          console.log("Question already exists")
+          return;
+        }
+        console.log("question updated");
+        return "success";
+      });
+    });
+  },
+
+  removeBorC ({q_id }) {
     return mysql.dbConnect()
     .then(function(con) {
       var sql_q_test = "SELECT * FROM test_qs WHERE q_id = "+ q_id;
@@ -229,4 +258,45 @@ module.exports = {
       });
     });
   },
+
+  getSA () {
+    return mysql.dbConnect()
+    .then((con) => {
+      var sql_get_scr = "SELECT questions.year AS Y, "+
+                        "       questions.q_id AS ID, "+
+                        "       questions.text AS Q "+
+                        "FROM   questions "+
+                        "WHERE  questions.section_id = 'B' "+
+                        "ORDER BY ID DESC";
+      return con.query(sql_get_scr)
+
+      .then((result) => {
+        con.end();
+        return result;
+      });
+    });
+  },
+
+  addSA ({q_year, question }) {
+    return mysql.dbConnect()
+    .then(function (con) {
+      var sql_s_add = "INSERT INTO questions (text, section_id, year) "+
+                        "SELECT ?, 'B', ? "+
+                        "WHERE NOT EXISTS ("+
+                        "SELECT text FROM questions "+
+                        "WHERE  text = ? "+
+                        "AND    year = ?"+
+                      ") LIMIT 1";
+      return con.query(sql_s_add, [question, q_year, question, q_year])
+
+      .then(function (result) {
+        console.log("sa question added");
+        con.end();
+        return result;
+      },
+      function (errorMessage) {
+        console.log("question not added");
+      });
+    });
+  }
 }

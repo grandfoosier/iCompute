@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>iCompute Scratch edit</title>
+  <title>iCompute question management</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,7 +16,7 @@
     <span class="navbar-brand">iCompute</span>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="btn btn-link" href="../manageScratch/" role="button">Back</a></li>
+        <li class="nav-item"><a class="btn btn-link" href="../manageSAs/" role="button">Back</a></li>
       </ul>
     </div>
   </div>
@@ -33,13 +33,13 @@
 <!-- Body -->
 <body>
   <div class="mx-5" align="center">
-    <form class="editScratch">
-      <h1>Edit a Scratch question</h1></br>
-      <input type="hidden" class="q_id" id="q_id" value="-1"></input>
-      <input type="hidden" class="q_year" id="q_year" value="-1"></input>
-
-      <textarea class="question" id="question" placeholder="Question" rows="4" cols="75" required></textarea><p></p>
-      <button type="submit" class="btn btn-success m-3">Update question</button>
+    <form class="addSA" action='/addSA' method="post" enctype="multipart/form-data">
+      <h1>Add a new short answer question</h1></br>
+      <textarea class="question" name="question" placeholder="Question" rows="4" cols="75" required></textarea><p></p>
+      <h3>Upload images for this question</h3>
+      <p>Please end file names in "_1", "_2", etc. according to the order you would like them shown</p></br>
+      <input type="file" name="saImgs" multiple accept="image/png, image/jpeg"/>
+      <input type="submit" value="Upload" name="submit" />
     </form>
   </div>
 
@@ -49,22 +49,5 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <!-- Optional JavaScript -->
   <script src="/app_Qs.js"></script>
-  <script>
-  window.onload = function () {
-    var q_id = location.search.substring(1).split("=")[1];
-    get('/getScratch', {})
-    .then (function (response) {
-      return response.json()
-      .then (function (data) {
-        for (var key=0, size=data.length; key<size; key += 1) {
-          if (data[key].ID == q_id) {break; }
-        }
-        $("#q_id").val(data[key].ID);
-        $("#q_year").val(data[key].Y);
-        $("#question").html(data[key].Q);
-      })
-    })
-  }
-  </script>
 </body>
 </html>

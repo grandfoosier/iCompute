@@ -1,7 +1,7 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <title>iCompute question management</title>
+  <title>iCompute Scratch edit</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,7 +16,7 @@
     <span class="navbar-brand">iCompute</span>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="btn btn-link" href="../superDash/" role="button">Back</a></li>
+        <li class="nav-item"><a class="btn btn-link" href="../manageSAs/" role="button">Back</a></li>
       </ul>
     </div>
   </div>
@@ -32,16 +32,15 @@
 
 <!-- Body -->
 <body>
-  <div class="row m-5">
-    <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="manageMCQs/" role="button">Multiple Choice</a>
-    </div>
-    <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="manageSAs.html" role="button">Short Answer</a>
-    </div>
-    <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="manageScratch/" role="button">Scratch</a>
-    </div>
+  <div class="mx-5" align="center">
+    <form class="editSA">
+      <h1>Edit a short answer question</h1></br>
+      <input type="hidden" class="q_id" id="q_id" value="-1"></input>
+      <input type="hidden" class="q_year" id="q_year" value="-1"></input>
+
+      <textarea class="question" id="question" placeholder="Question" rows="4" cols="75" required></textarea><p></p>
+      <button type="submit" class="btn btn-success m-3">Update question</button>
+    </form>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -50,5 +49,22 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <!-- Optional JavaScript -->
   <script src="/app_Qs.js"></script>
+  <script>
+  window.onload = function () {
+    var q_id = location.search.substring(1).split("=")[1];
+    get('/getSA', {})
+    .then (function (response) {
+      return response.json()
+      .then (function (data) {
+        for (var key=0, size=data.length; key<size; key += 1) {
+          if (data[key].ID == q_id) {break; }
+        }
+        $("#q_id").val(data[key].ID);
+        $("#q_year").val(data[key].Y);
+        $("#question").html(data[key].Q);
+      })
+    })
+  }
+  </script>
 </body>
 </html>

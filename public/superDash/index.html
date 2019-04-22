@@ -43,8 +43,14 @@
 <!-- Body -->
 <body>
   <div class="row m-5">
-    <div class="col-4">
-      <a class="btn btn-block btn-info btn-lg" href="/superDash/manageQs.html" role="button">Manage Question Bank</a>
+    <div class="dropdown col-4">
+      <button class="btn btn-block btn-info btn-lg dropdown-toggle" type="button" id="dropdownMenuButton"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage Questions</button>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="/superDash/manageMCQs/">Multiple Choice</a>
+        <a class="dropdown-item" href="/superDash/manageSAs/">Short Answer</a>
+        <a class="dropdown-item" href="/superDash/manageScratch/">Scratch Program</a>
+      </div>
     </div>
     <div class="col-4">
       <a class="btn btn-block btn-info btn-lg" href="/superDash/manageGraders/" role="button">Manage Graders</a>

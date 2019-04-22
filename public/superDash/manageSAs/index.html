@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>iCompute Scratch edit</title>
+  <title>iCompute question management</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,7 +16,7 @@
     <span class="navbar-brand">iCompute</span>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="btn btn-link" href="../manageScratch/" role="button">Back</a></li>
+        <li class="nav-item"><a class="btn btn-link" href="../" role="button">Back</a></li>
       </ul>
     </div>
   </div>
@@ -32,15 +32,19 @@
 
 <!-- Body -->
 <body>
-  <div class="mx-5" align="center">
-    <form class="editScratch">
-      <h1>Edit a Scratch question</h1></br>
-      <input type="hidden" class="q_id" id="q_id" value="-1"></input>
-      <input type="hidden" class="q_year" id="q_year" value="-1"></input>
+  <div class="row m-3 justify-content-center">
+    <div id="bootTableQs" class="card col-11">
+      <div class="row m-5 justify-content-center">
+        <div class="col-3">
+          <a class="btn btn-block btn-success" href="addSA.html" role="button">Add</a>
+        </div>
+        <div class="col-3">
+          <a class="btn btn-block btn-warning" href="ERSA.html" role="button">Edit/Delete</a>
+        </div>
+      </div>
 
-      <textarea class="question" id="question" placeholder="Question" rows="4" cols="75" required></textarea><p></p>
-      <button type="submit" class="btn btn-success m-3">Update question</button>
-    </form>
+      <table id="tableOfQs" class="table table-striped" style="width:100%"></table>
+    </div>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -50,21 +54,33 @@
   <!-- Optional JavaScript -->
   <script src="/app_Qs.js"></script>
   <script>
-  window.onload = function () {
-    var q_id = location.search.substring(1).split("=")[1];
-    get('/getScratch', {})
-    .then (function (response) {
-      return response.json()
-      .then (function (data) {
-        for (var key=0, size=data.length; key<size; key += 1) {
-          if (data[key].ID == q_id) {break; }
-        }
-        $("#q_id").val(data[key].ID);
-        $("#q_year").val(data[key].Y);
-        $("#question").html(data[key].Q);
-      })
+  get('/getSA', {})
+  .then ((response) => {
+    return response.json()
+    .then ((data) => {
+      var r = new Array(), j = -1;
+      r[++j] =  '<thead>'+
+                  '<tr>'+
+                    '<th>Year</th>'+
+                    '<th>Question</th>'+
+                  '</tr>'+
+                '</thead>'+
+                '<tbody>'
+      for (var key=0, size=data.length; key<size; key++){
+        var corr_op;
+        r[++j] =  '<tr>'+
+                    '<td>'
+        r[++j] =      data[key].Y
+        r[++j] =    '</td>'+
+                    '<td>'
+        r[++j] =      data[key].Q
+        r[++j] =    '</td>'+
+                  '</tr>'
+      }
+      r[++j] =  '</tbody>'
+      $('#tableOfQs').html(r.join(''))
     })
-  }
+  })
   </script>
 </body>
 </html>
