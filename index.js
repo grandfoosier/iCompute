@@ -105,7 +105,7 @@ app.get('/gradeSecC',graderScratch.graderSchoolsForScratch)
 
 app.post('/graderDownloadScratch',(req,res)=>{
   graderScratch.downloadScratch(req,res)
-  
+
 })
 
 app.post('/gradeScratch',graderScratch.gradeTeamScr)
@@ -253,6 +253,13 @@ app.get('/getScratch', (req, res) => {
   });
 });
 
+app.post('/getImages', (req, res) => {
+  manageQs.getImages({q_id: req.body.q_id })
+  .then(function (result) {
+    res.status(200).send(result);
+  });
+});
+
 app.post('/addScratch', parser.array('scratchImgs', 10), async function (req, res, next) {
   const today = new Date();
   var q_year = today.getFullYear();
@@ -261,10 +268,10 @@ app.post('/addScratch', parser.array('scratchImgs', 10), async function (req, re
     q_year: q_year,
     question: question
   })
-  var q_id = data.insertId; console.log("q_id: ", q_id);
+  var q_id = data.insertId;
   for (var i=0; i<req.files.length; i++) {
-    var oldname = req.files[i].originalname; console.log("oldname: ", oldname);
-    var url = req.files[i].url; console.log("url: ", url);
+    var oldname = req.files[i].originalname;
+    var url = req.files[i].url;
     await manageQs.addImg({
       oldname: oldname,
       url: url,
