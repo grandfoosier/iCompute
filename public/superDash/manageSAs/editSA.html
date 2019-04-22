@@ -41,6 +41,7 @@
       <textarea class="question" id="question" placeholder="Question" rows="4" cols="75" required></textarea><p></p>
       <button type="submit" class="btn btn-success m-3">Update question</button>
     </form>
+    <table id="tableOfIs" class="table table-striped" style="width:50%"></table>
   </div>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -52,6 +53,30 @@
   <script>
   window.onload = function () {
     var q_id = location.search.substring(1).split("=")[1];
+    post('/getImages', {q_id})
+    .then ((response) => {
+      return response.json()
+      .then ((data) => {
+        var r = new Array(), j = -1;
+        r[++j] =  '<thead>'+
+                    '<tr>'+
+                      '<th>Images</th>'+
+                    '</tr>'+
+                  '</thead>'+
+                  '<tbody>'
+        for (var key=0, size=data.length; key<size; key++){
+          var corr_op;
+          r[++j] =  '<tr>'+
+                      '<td>'
+          r[++j] =      data[key].old_name
+          r[++j] =    '</td>'+
+                    '</tr>'
+        }
+        r[++j] =  '</tbody>'
+        $('#tableOfIs').html(r.join(''))
+      })
+    })
+    
     get('/getSA', {})
     .then (function (response) {
       return response.json()
